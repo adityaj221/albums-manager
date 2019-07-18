@@ -21,6 +21,11 @@
             "UnauthRoleName": "albums-manager-dev-20190719002422-unauthRole",
             "StackName": "albums-manager-dev-20190719002422",
             "StackId": "arn:aws:cloudformation:ap-southeast-1:380592939077:stack/albums-manager-dev-20190719002422/80237d90-a978-11e9-a369-024d84896d6a"
+        },
+        "categories": {
+            "auth": {
+                "albumsmanager1199a6201199a620": {}
+            }
         }
     }
 }

@@ -1,1 +1,9 @@
-{}
+{
+    "auth": {
+        "albumsmanager1199a6201199a620": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    }
+}
