@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "aws-amplify": "^1.1.30",
+    "aws-amplify-vue": "^0.2.13",
+    "aws-appsync": "^1.8.1",
     "quasar": "^1.0.0",
     "vue-i18n": "^8.0.0"
   },
