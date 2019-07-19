@@ -14,16 +14,6 @@ export default {
         signUpConfig: {
           hiddenDefaults: [
             'phone_number'
-          ],
-          signUpFields: [
-            {
-              label: 'Name',
-              key: 'name',
-              required: true,
-              displayOrder: 0,
-              type: 'string',
-              signUpWith: true
-            }
           ]
         }
       }
