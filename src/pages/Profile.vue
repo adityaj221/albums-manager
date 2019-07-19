@@ -6,17 +6,19 @@
 <script>
 export default {
   name: 'Profile',
-  computed: {
-    signedIn: {
-      get () {
-        return this.$store.state.auth.signedIn
-      }
-    },
-    user: {
-      get () {
-        return this.$store.state.auth.user
-      }
+  data () {
+    return {
+      user: ''
     }
+  },
+  beforeCreate () {
+    this.$Auth.currentAuthenticatedUser()
+      .then(user => {
+        this.user = user
+      })
+      .catch(() => {
+        this.user = null
+      })
   }
 }
 </script>

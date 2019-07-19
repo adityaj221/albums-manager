@@ -18,13 +18,6 @@ export default {
         }
       }
     }
-  },
-  mounted () {
-    this.$AmplifyEventBus.$on('authState', info => {
-      if (info === 'signedIn') {
-        this.$router.push({ name: 'home' })
-      }
-    })
   }
 }
 </script>
