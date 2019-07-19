@@ -42,6 +42,7 @@
       content-class="bg-grey-2"
     )
       q-scroll-area(style="height: 100%")
+        app-menu.q-my-lg
 
     q-page-container
       router-view
@@ -51,6 +52,7 @@
 </template>
 
 <script>
+import AppMenu from 'components/AppMenu'
 
 export default {
   name: 'Layout',
@@ -58,6 +60,9 @@ export default {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop
     }
+  },
+  components: {
+    AppMenu
   },
   methods: {
     async signOut () {

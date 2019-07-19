@@ -11,6 +11,7 @@ export default async ({
   Vue
 }) => {
   Vue.use(AmplifyPlugin, AmplifyModules)
+  Amplify.graphqlOperation = AmplifyModules.graphqlOperation
   Vue.prototype.$Amplify = Amplify
   Vue.prototype.$AmplifyEventBus = AmplifyEventBus
   Vue.prototype.$Auth = AmplifyModules.Auth

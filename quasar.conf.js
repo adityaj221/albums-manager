@@ -51,7 +51,8 @@ module.exports = function (ctx) {
         'QSpace',
         'QBadge',
         'QTooltip',
-        'QMenu'
+        'QMenu',
+        'QTree'
       ],
 
       directives: [
