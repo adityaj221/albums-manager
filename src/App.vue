@@ -26,6 +26,7 @@ export default {
       })
       .catch(() => {
         this.signedIn = false
+        this.user = ''
       })
   },
   computed: {
