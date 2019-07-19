@@ -50,7 +50,8 @@ module.exports = function (ctx) {
         'QScrollArea',
         'QSpace',
         'QBadge',
-        'QTooltip'
+        'QTooltip',
+        'QMenu'
       ],
 
       directives: [

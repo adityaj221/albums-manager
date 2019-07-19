@@ -21,6 +21,21 @@
           q-btn(round dense flat icon="notifications")
             q-badge(color="red" text-color="white" floating) 2
             q-tooltip Notifications
+          q-btn(round dense flat icon="account_circle")
+            q-tooltip Account
+            q-menu
+              q-list
+                q-item(clickable :to="{name: 'profile'}")
+                  q-item-section(avatar)
+                    q-icon(name="settings")
+                  q-item-section
+                    q-item-label Profile
+                    q-item-label(caption) View your profile
+                q-item(clickable @click="signOut")
+                  q-item-section(avatar)
+                    q-icon(name="exit_to_app")
+                  q-item-section
+                    q-item-label Logout
     q-drawer(
       v-model="leftDrawerOpen"
       bordered
