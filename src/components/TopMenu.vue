@@ -13,7 +13,8 @@ export default {
   name: 'TopMenu',
   data () {
     return {
-      showNewAlbumForm: false
+      showNewAlbumForm: false,
+      albumId: '0'
     }
   },
   components: {
