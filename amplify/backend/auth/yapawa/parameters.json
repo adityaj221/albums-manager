@@ -1,9 +1,9 @@
 {
-    "identityPoolName": "albums_manager1199a620_identitypool_1199a620",
+    "identityPoolName": "yapawa_albums_manager",
     "allowUnauthenticatedIdentities": false,
-    "openIdLambdaRoleName": "albums1199a620_openid_lambda_role",
-    "resourceNameTruncated": "albums1199a620",
-    "userPoolName": "albums_manager1199a620_userpool_1199a620",
+    "openIdLambdaRoleName": "yapawa064e9b0f_openid_lambda_role",
+    "resourceNameTruncated": "yapawa064e9b0f",
+    "userPoolName": "yapawa",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -21,33 +21,33 @@
         "Requires Numbers"
     ],
     "requiredAttributes": [
-        "email",
-        "name"
+        "email"
     ],
-    "userpoolClientName": "albums1199a620_app_client",
+    "userpoolClientName": "yapawa064e9b0f_app_client",
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
+        "family_name",
         "locale",
-        "phone_number",
-        "preferred_username",
+        "given_name",
         "picture",
-        "email",
-        "name"
+        "email"
     ],
     "userpoolClientReadAttributes": [
         "email",
+        "family_name",
         "locale",
-        "phone_number",
-        "preferred_username",
-        "picture"
+        "given_name",
+        "picture",
+        "email_verified",
+        "phone_number_verified"
     ],
-    "mfaLambdaRole": "albums1199a620_totp_lambda_role",
-    "userpoolClientLambdaRole": "albums1199a620_userpoolclient_lambda_role",
+    "mfaLambdaRole": "yapawa064e9b0f_totp_lambda_role",
+    "userpoolClientLambdaRole": "yapawa064e9b0f_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
     "useDefault": "manual",
     "authSelections": "identityPoolAndUserPool",
-    "resourceName": "albumsmanager1199a6201199a620",
+    "resourceName": "yapawa",
     "thirdPartyAuth": false,
     "triggers": "{}",
     "hostedUI": false,
