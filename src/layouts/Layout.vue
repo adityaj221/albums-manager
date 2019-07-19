@@ -15,6 +15,12 @@
         q-toolbar-title.row.items-center.no-wrap(v-if="$q.screen.gt.sm" shrink)
           span.q-ml-sm Yapawa
 
+        q-space
+
+        .q-gutter-sm.row.items-center.no-wrap
+          q-btn(round dense flat icon="notifications")
+            q-badge(color="red" text-color="white" floating) 2
+            q-tooltip Notifications
     q-drawer(
       v-model="leftDrawerOpen"
       bordered
