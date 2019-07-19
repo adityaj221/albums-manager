@@ -1,0 +1,61 @@
+type Album
+  @model
+  @auth(rules: [{allow: owner}])
+  @key(fields: ["parentId"], name: "gsi-AlbumAlbums")
+{
+  id: ID!
+  name: String!
+  parent: Album @connection(name: "AlbumAlbums", keyField: "parentId")
+  parentId: ID!
+  children: [Album] @connection(name: "AlbumAlbums", keyField: "parentId")
+  photos: [Photo] @connection(name: "AlbumPhotos", keyField: "albumId")
+  order: Int
+  slug: String
+  description: String
+  summary: String
+  visibility: Visibility
+  status: Status!
+  createdOn: AWSDateTime
+  publishedOn: AWSDateTime
+  modifiedOn: AWSDateTime
+}
+
+type Photo
+  @model
+  @auth(rules: [{allow: owner}])
+{
+  id: ID!
+  album: Album @connection(name: "AlbumPhotos", keyField: "albumId")
+  albumId: ID
+  order: Int
+  file: S3Object
+  visibility: Visibility
+  width: Int
+  height: Int
+  contentType: String
+  title: String
+  description: String
+  status: Status!
+  capturedOn: AWSDateTime
+  uploadedOn: AWSDateTime
+  publishedOn: AWSDateTime
+  modifiedOn: AWSDateTime
+}
+
+type S3Object {
+    bucket: String!
+    key: String!
+    region: String!
+}
+
+enum Status {
+  deleted
+  draft
+  published
+}
+
+enum Visibility {
+  public
+  private
+  protected
+}
