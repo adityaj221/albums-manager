@@ -16,6 +16,8 @@
           span.q-ml-sm Yapawa
 
         q-space
+        top-menu
+        q-space
 
         .q-gutter-sm.row.items-center.no-wrap
           q-btn(round dense flat icon="notifications")
@@ -53,6 +55,7 @@
 
 <script>
 import AppMenu from 'components/AppMenu'
+import TopMenu from 'components/TopMenu'
 
 export default {
   name: 'Layout',
@@ -62,7 +65,8 @@ export default {
     }
   },
   components: {
-    AppMenu
+    AppMenu,
+    TopMenu
   },
   methods: {
     async signOut () {
