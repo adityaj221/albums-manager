@@ -16,20 +16,13 @@ export default {
   name: 'AlbumsTree',
   data () {
     return {
-      selected: null,
-      lazyAlbumTree: [],
-      albumTree: []
     }
   },
   mounted () {
-    // this.buildTree('0', (tree) => { this.lazyAlbumTree = tree })
-    this.albumTree = this.buildNodes('0')
+    this.albumTree = this.buildNodes()
   },
   methods: {
-    onLazyLoadTree ({ node, key, done, fail }) {
-      this.buildTree(key, done, true)
-    },
-    buildNodes (parentId) {
+    buildNodes (parentId = null) {
       let nodes = []
       this.buildTree(parentId, (tree) => {
         tree.forEach(item => {
@@ -76,6 +69,24 @@ export default {
       if (!key) {
         let old = this.selected
         this.$nextTick(() => { this.selected = old })
+      }
+    }
+  },
+  computed: {
+    albumTree: {
+      get () {
+        return this.$store.state.albums.tree
+      },
+      set (val) {
+        this.$store.commit('albums/updateTree', val)
+      }
+    },
+    selected: {
+      get () {
+        return this.$store.state.albums.selected
+      },
+      set (val) {
+        this.$store.commit('albums/setSelected', val)
       }
     }
   }
