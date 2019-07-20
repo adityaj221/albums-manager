@@ -1,14 +1,24 @@
 <template lang="pug">
-  .q-gutter-sm.row.items-center.no-wrap
-    q-btn.q-ml-sm.q-px-md(v-if="$q.screen.gt.xs" flat dense no-wrap icon="add_photo_alternate" no-caps label="New Album" @click="showNewAlbumForm = true")
-    q-btn.q-ml-sm.q-px-md(v-if="$q.screen.gt.xs && this.albumId" flat dense no-wrap icon="cloud_upload" no-caps label="Upload")
+  .q-gutter-xs.row.items-center.no-wrap
+    q-btn.q-ml-sm.q-px-md(
+      v-if="$q.screen.gt.xs"
+      flat dense no-wrap no-caps
+      icon="add_photo_alternate"
+      label="New Album"
+      :to="{name: 'newAlbum'}"
+    )
+    q-btn.q-ml-sm.q-px-md(
+      v-if="$q.screen.gt.xs && this.albumId"
+      flat dense no-wrap no-caps
+      icon="cloud_upload"
+      label="Upload"
+    )
 
     q-dialog(v-model="showNewAlbumForm" persistent)
       new-album(:parentId="albumId")
 </template>
 
 <script>
-import NewAlbum from 'components/NewAlbum'
 export default {
   name: 'TopMenu',
   data () {
@@ -16,9 +26,6 @@ export default {
       showNewAlbumForm: false,
       albumId: '0'
     }
-  },
-  components: {
-    NewAlbum: NewAlbum
   }
 }
 </script>

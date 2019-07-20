@@ -1,6 +1,6 @@
 <template>
   <q-tree
-    :nodes="albumTree"
+    :nodes="tree"
     @update:selected="onSelect"
     :selected.sync="selected"
     selected-color="primary"
@@ -14,15 +14,11 @@ import { listAlbums } from '../graphql/queries'
 
 export default {
   name: 'AlbumsTree',
-  data () {
-    return {
-    }
-  },
   mounted () {
     this.albumTree = this.buildNodes()
   },
   methods: {
-    buildNodes (parentId = null) {
+    buildNodes (parentId = 'root') {
       let nodes = []
       this.buildTree(parentId, (tree) => {
         tree.forEach(item => {
@@ -34,7 +30,7 @@ export default {
       }, false)
       return nodes
     },
-    buildTree (parentId, done, lazy = true) {
+    buildTree (parentId, done) {
       let query = this.$Amplify.graphqlOperation(listAlbums, { filter: { parentId: { eq: parentId } } })
       this.$Amplify.API.graphql(query).then(result => {
         if (result.data.listAlbums.items.length === 0) {
@@ -43,7 +39,7 @@ export default {
         }
         let children = []
         result.data.listAlbums.items.forEach(item => {
-          let hasChildren = item.children.items.length > 0
+          let hasChildren = item.children.items && item.children.items.length > 0
           let childItem = {
             icon: 'photo_library',
             iconColor: 'grey',
@@ -54,7 +50,6 @@ export default {
             handler: this.openAlbum
           }
           if (hasChildren) {
-            childItem.lazy = lazy
             childItem.expandable = true
           }
           children.push(childItem)
