@@ -18,8 +18,7 @@ const routes = [
         name: 'profile',
         component: () => import('pages/Profile.vue'),
         meta: {
-          requiresAuth: true,
-          title: 'Profile'
+          requiresAuth: true
         }
       }
     ]
