@@ -32,7 +32,16 @@ const listAlbumsTree = `query ListAlbums(
   }
 }
 `
-
+const onCreateAlbum = `subscription OnCreateAlbum {
+  onCreateAlbum {
+    id
+    name
+    parent {
+      id
+    }
+  }
+}
+`
 export default {
   name: 'AlbumsTree',
   data () {
@@ -42,6 +51,11 @@ export default {
   },
   async mounted () {
     this.albumTree = await this.buildTree()
+    this.$Amplify.API.graphql(
+      this.$Amplify.graphqlOperation(onCreateAlbum)
+    ).subscribe({
+      next: (albumData) => console.log(albumData)
+    })
   },
   methods: {
     async buildTree (parentId = 'root') {
