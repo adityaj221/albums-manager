@@ -45,8 +45,8 @@ export default {
   data () {
     return {
       name: '',
-      description: '',
-      parentAlbum: '',
+      description: null,
+      parentAlbum: 'root',
       newAlbumId: uid()
     }
   },
@@ -57,13 +57,17 @@ export default {
       let slug = this.name
       let timestamp = Date.now()
       let createdOn = date.formatDate(timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+      let parentId = this.parentAlbum
+      if (parentId === null) {
+        parentId = 'root'
+      }
 
       let input = {
         id: this.newAlbumId,
         name: this.name,
         description: this.description,
         summary,
-        parentId: this.parentAlbum,
+        parentId,
         order,
         slug,
         visibility: 'public',
