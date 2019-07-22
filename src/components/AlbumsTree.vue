@@ -1,6 +1,6 @@
 <template>
   <q-tree
-    :nodes="tree"
+    :nodes="renderTree"
     @update:selected="onSelect"
     :selected.sync="selected"
     selected-color="primary"
@@ -10,52 +10,78 @@
 </template>
 
 <script>
-import { listAlbums } from '../graphql/queries'
+// import { listAlbums } from '../graphql/queries'
+
+const listAlbumsTree = `query ListAlbums(
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAlbums(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      children {
+        items {
+          id
+        }
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`
 
 export default {
   name: 'AlbumsTree',
-  mounted () {
-    this.albumTree = this.buildNodes()
+  async mounted () {
+    this.albumTree = await this.buildTree()
   },
   methods: {
-    buildNodes (parentId = 'root') {
-      let nodes = []
-      this.buildTree(parentId, (tree) => {
-        tree.forEach(item => {
-          if (item.expandable) {
-            item.children = this.buildNodes(item.id)
-          }
-          nodes.push(item)
-        })
-      }, false)
-      return nodes
-    },
-    buildTree (parentId, done) {
-      let query = this.$Amplify.graphqlOperation(listAlbums, { filter: { parentId: { eq: parentId } } })
-      this.$Amplify.API.graphql(query).then(result => {
-        if (result.data.listAlbums.items.length === 0) {
-          done([])
-          return
+    async buildTree (parentId = 'root') {
+      let branch = await this.getBranch(parentId)
+      for (let i = 0; i < branch.length; i++) {
+        if (branch[i].childrenCount > 0) {
+          branch[i].children = await this.buildTree(branch[i].id)
         }
-        let children = []
-        result.data.listAlbums.items.forEach(item => {
-          let hasChildren = item.children.items && item.children.items.length > 0
-          let childItem = {
-            icon: 'photo_library',
-            iconColor: 'grey',
-            label: item.name,
-            id: item.id,
-            lazy: false,
-            expandable: false,
-            handler: this.openAlbum
-          }
-          if (hasChildren) {
-            childItem.expandable = true
-          }
-          children.push(childItem)
-        })
-        done(children)
+      }
+      return branch
+    },
+    async getBranch (parentId = 'root') {
+      let query = this.$Amplify.graphqlOperation(listAlbumsTree, { filter: { parentId: { eq: parentId } } })
+      let nodes = await this.$Amplify.API.graphql(query).then(result => {
+        return result.data.listAlbums.items
       })
+      let branch = []
+      for (let i = 0; i < nodes.length; i++) {
+        let item = {
+          id: nodes[i].id,
+          name: nodes[i].name,
+          childrenCount: nodes[i].children.items.length || 0
+        }
+        branch.push(item)
+      }
+      return branch
+    },
+    renderBranch (branch) {
+      let items = []
+      for (let i = 0; i < branch.length; i++) {
+        let item = {
+          icon: 'photo_library',
+          iconColor: 'grey',
+          label: branch[i].name,
+          id: branch[i].id,
+          expandable: false,
+          handler: this.openAlbum
+        }
+        if (branch[i].childrenCount > 0) {
+          item.expandable = true
+          item.children = this.renderBranch(branch[i].children)
+        }
+        items.push(item)
+      }
+      return items
     },
     openAlbum (album) {
       this.$router.push({ path: `/album/${album.id}` })
@@ -83,6 +109,12 @@ export default {
       set (val) {
         this.$store.commit('albums/setSelected', val)
       }
+    },
+    renderTree () {
+      let tree = this.albumTree
+      let rendered = []
+      rendered = this.renderBranch(tree)
+      return rendered
     }
   }
 }
