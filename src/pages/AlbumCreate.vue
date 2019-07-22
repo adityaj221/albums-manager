@@ -22,10 +22,13 @@
                 label="Description"
               )
               q-select(
-                v-model="parentId"
-                :value="parentId"
+                options-dense
+                v-model="parentAlbum"
+                :value="parentAlbum"
                 :options="options"
                 label="Parent Album"
+                emit-value
+                map-options
               )
               q-btn(color="primary" label="Create" :disabled="btnStatus" @click="mutate")
 </template>
@@ -36,13 +39,14 @@ import { date, uid } from 'quasar'
 
 export default {
   name: 'AlbumCreate',
+  created () {
+    this.parentAlbum = this.albumParentId
+  },
   data () {
     return {
       name: '',
       description: '',
-      selectedOption: {},
-      parentId: {},
-      options: [],
+      parentAlbum: '',
       newAlbumId: uid()
     }
   },
@@ -59,7 +63,7 @@ export default {
         name: this.name,
         description: this.description,
         summary,
-        parentId: 'root',
+        parentId: this.parentAlbum,
         order,
         slug,
         visibility: 'public',
@@ -75,7 +79,7 @@ export default {
     },
     albumParentId: {
       get () {
-        return this.$store.state.albums.selected
+        return this.$store.state.albums.activeAlbumId
       }
     },
     albumTree: {
@@ -83,17 +87,11 @@ export default {
         return this.$store.state.albums.tree
       }
     },
-    buildOptions () {
-      let tree = JSON.parse(this.albumTree)
-      tree.forEach(item => {
-        console.log(item) // eslint-disable-line no-console
-      })
-      return {}
-    },
-    buildOptionsItem () {
-      return {}
+    options () {
+      let options = []
+      this.renderOptions(options, this.albumTree)
+      return options
     }
-
   },
   methods: {
     onCreateFinished () {
@@ -102,15 +100,31 @@ export default {
       this.parentId = {}
       this.$q.notify({
         message: 'Album Created<br/>Now add some photos',
+        html: true,
         color: 'positive',
         timeout: 2500,
         position: 'center'
       })
       this.$router.push({ path: `/album/${this.newAlbumId}` })
+    },
+    renderOptions (options, tree, depth = 0) {
+      for (let i = 0; i < tree.length; i++) {
+        let option = {
+          label: tree[i].name,
+          value: tree[i].id,
+          depth
+        }
+        if (depth > 0) {
+          let padding = '-'.repeat(depth)
+          option.label = `${padding} ${tree[i].name}`
+        }
+        options.push(option)
+        if (tree[i].childrenCount > 0) {
+          options = this.renderOptions(options, tree[i].children, depth + 1)
+        }
+      }
+      return options
     }
-  },
-  mounted () {
-    this.buildOptions()
   }
 }
 </script>

@@ -55,9 +55,6 @@ module.exports = function (ctx) {
         'QTree',
         'QInput',
         'QSelect',
-        'QDialog',
-        'QCard',
-        'QCardSection',
         'QSpinner'
       ],
 

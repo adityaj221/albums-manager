@@ -8,23 +8,22 @@
       :to="{name: 'newAlbum'}"
     )
     q-btn.q-ml-sm.q-px-md(
-      v-if="$q.screen.gt.xs && this.albumId"
+      v-if="$q.screen.gt.xs"
       flat dense no-wrap no-caps
       icon="cloud_upload"
       label="Upload"
+      :disable="(this.activeAlbumId === null)"
     )
-
-    q-dialog(v-model="showNewAlbumForm" persistent)
-      new-album(:parentId="albumId")
 </template>
 
 <script>
 export default {
   name: 'TopMenu',
-  data () {
-    return {
-      showNewAlbumForm: false,
-      albumId: '0'
+  computed: {
+    activeAlbumId: {
+      get () {
+        return this.$store.state.albums.activeAlbumId
+      }
     }
   }
 }

@@ -35,6 +35,11 @@ const listAlbumsTree = `query ListAlbums(
 
 export default {
   name: 'AlbumsTree',
+  data () {
+    return {
+      selected: null
+    }
+  },
   async mounted () {
     this.albumTree = await this.buildTree()
   },
@@ -100,14 +105,6 @@ export default {
       },
       set (val) {
         this.$store.commit('albums/updateTree', val)
-      }
-    },
-    selected: {
-      get () {
-        return this.$store.state.albums.selected
-      },
-      set (val) {
-        this.$store.commit('albums/setSelected', val)
       }
     },
     renderTree () {
