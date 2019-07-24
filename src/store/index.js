@@ -26,7 +26,7 @@ export default function (/* { ssrContext } */) {
   if (process.env.DEV && module.hot) {
     module.hot.accept(['./albums'], () => {
       const newAlbums = require('./albums').default
-      Store.hotUpdate({ modules: { showcase: newAlbums } })
+      Store.hotUpdate({ modules: { albums: newAlbums } })
     })
   }
 
