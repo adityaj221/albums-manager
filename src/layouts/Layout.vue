@@ -51,11 +51,13 @@
 
     q-footer
       .text-right.q-pr-sm.text-caption Quasar v{{ $q.version }}
+    fetch-albums
 </template>
 
 <script>
 import AppMenu from 'components/AppMenu'
 import TopMenu from 'components/TopMenu'
+import FetchAlbums from 'components/FetchAlbums'
 
 export default {
   name: 'Layout',
@@ -66,7 +68,8 @@ export default {
   },
   components: {
     AppMenu,
-    TopMenu
+    TopMenu,
+    FetchAlbums
   },
   methods: {
     async signOut () {

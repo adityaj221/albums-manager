@@ -111,20 +111,19 @@ export default {
       })
       this.$router.push({ path: `/album/${this.newAlbumId}` })
     },
-    renderOptions (options, tree, depth = 0) {
+    renderOptions (options, tree) {
       for (let i = 0; i < tree.length; i++) {
         let option = {
           label: tree[i].name,
-          value: tree[i].id,
-          depth
+          value: tree[i].id
         }
-        if (depth > 0) {
-          let padding = '-'.repeat(depth)
+        if (tree[i].depth > 0) {
+          let padding = '-'.repeat(tree[i].depth)
           option.label = `${padding} ${tree[i].name}`
         }
         options.push(option)
-        if (tree[i].childrenCount > 0) {
-          options = this.renderOptions(options, tree[i].children, depth + 1)
+        if (tree[i].hasChildren) {
+          options = this.renderOptions(options, tree[i].children)
         }
       }
       return options

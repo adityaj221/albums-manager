@@ -26,7 +26,7 @@ export default {
     next()
   },
   beforeDestroy () {
-    this.albumId = null
+    // this.albumId = null
   },
   computed: {
     getAlbumQuery () {

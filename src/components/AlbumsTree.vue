@@ -3,85 +3,26 @@
     :nodes="renderTree"
     @update:selected="onSelect"
     :selected.sync="selected"
+    :expanded.sync="expanded"
     selected-color="primary"
     node-key="id"
     style="font-size:0.7em"
+    no-nodes-label="Loading Albums..."
+    accordion
   />
 </template>
 
 <script>
-// import { listAlbums } from '../graphql/queries'
-
-const listAlbumsTree = `query ListAlbums(
-  $filter: ModelAlbumFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listAlbums(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      name
-      children {
-        items {
-          id
-        }
-        nextToken
-      }
-    }
-    nextToken
-  }
-}
-`
-const onCreateAlbum = `subscription OnCreateAlbum {
-  onCreateAlbum {
-    id
-    name
-    parent {
-      id
-    }
-  }
-}
-`
 export default {
   name: 'AlbumsTree',
   data () {
     return {
-      selected: null
+      expanded: []
     }
   },
-  async mounted () {
-    this.albumTree = await this.buildTree()
-    this.$Amplify.API.graphql(
-      this.$Amplify.graphqlOperation(onCreateAlbum)
-    ).subscribe({
-      next: (albumData) => console.log(albumData)
-    })
-  },
   methods: {
-    async buildTree (parentId = 'root') {
-      let branch = await this.getBranch(parentId)
-      for (let i = 0; i < branch.length; i++) {
-        if (branch[i].childrenCount > 0) {
-          branch[i].children = await this.buildTree(branch[i].id)
-        }
-      }
-      return branch
-    },
-    async getBranch (parentId = 'root') {
-      let query = this.$Amplify.graphqlOperation(listAlbumsTree, { filter: { parentId: { eq: parentId } } })
-      let nodes = await this.$Amplify.API.graphql(query).then(result => {
-        return result.data.listAlbums.items
-      })
-      let branch = []
-      for (let i = 0; i < nodes.length; i++) {
-        let item = {
-          id: nodes[i].id,
-          name: nodes[i].name,
-          childrenCount: nodes[i].children.items.length || 0
-        }
-        branch.push(item)
-      }
-      return branch
+    getPath (leaf) {
+      return this.albumTreeIndex[leaf] ? this.getPath(this.albumTreeIndex[leaf]).concat([leaf]) : [leaf]
     },
     renderBranch (branch) {
       let items = []
@@ -94,7 +35,7 @@ export default {
           expandable: false,
           handler: this.openAlbum
         }
-        if (branch[i].childrenCount > 0) {
+        if (branch[i].hasChildren) {
           item.expandable = true
           item.children = this.renderBranch(branch[i].children)
         }
@@ -110,9 +51,20 @@ export default {
         let old = this.selected
         this.$nextTick(() => { this.selected = old })
       }
+    },
+    setExpanded (val) {
+      this.expanded = val
     }
   },
   computed: {
+    selected: {
+      get () {
+        return this.$store.state.albums.activeAlbumId
+      },
+      set (val) {
+        this.$store.commit('albums/setActive', val)
+      }
+    },
     albumTree: {
       get () {
         return this.$store.state.albums.tree
@@ -121,11 +73,20 @@ export default {
         this.$store.commit('albums/updateTree', val)
       }
     },
+    albumTreeIndex: {
+      get () {
+        return this.$store.state.albums.treeIndex
+      }
+    },
     renderTree () {
       let tree = this.albumTree
-      let rendered = []
-      rendered = this.renderBranch(tree)
-      return rendered
+      if (tree && tree.length > 0) {
+        this.setExpanded(this.getPath(this.selected))
+        return this.renderBranch(tree)
+      } else {
+        this.setExpanded([])
+        return []
+      }
     }
   }
 }
