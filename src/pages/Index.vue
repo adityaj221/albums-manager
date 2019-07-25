@@ -1,7 +1,9 @@
-<template>
-  <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="~assets/quasar-logo-full.svg">
-  </q-page>
+<template lang="pug">
+  q-page(padding)
+    .row.justify-center
+      img(alt="Yapawa Logo" src="~assets/yapawa-logo.svg")
+    .row.justify-center.text-h1.text-uppercase yapawa
+    .row.justify-center.text-h2.text-capitalize yet another photo album web app
 </template>
 
 <style>
