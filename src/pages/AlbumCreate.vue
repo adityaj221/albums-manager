@@ -115,12 +115,8 @@ export default {
     renderOptions (options, tree, depth = 0) {
       for (let i = 0; i < tree.length; i++) {
         let option = {
-          label: tree[i].name,
+          label: `${'&nbsp;&nbsp;'.repeat(depth)}${tree[i].name}`,
           value: tree[i].id
-        }
-        if (depth > 0) {
-          let padding = '-'.repeat(depth)
-          option.label = `${padding} ${tree[i].name}`
         }
         options.push(option)
         if (tree[i].children && tree[i].children.length > 0) {
