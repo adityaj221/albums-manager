@@ -21,6 +21,8 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -38,6 +40,8 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -54,6 +58,8 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -85,6 +91,8 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -108,6 +116,8 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -125,6 +135,8 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -141,6 +153,8 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -172,6 +186,8 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -195,6 +211,8 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -212,6 +230,8 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -228,6 +248,8 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -259,6 +281,8 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -281,6 +305,8 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -298,6 +324,8 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order
@@ -339,6 +367,8 @@ export const updatePhoto = `mutation UpdatePhoto($input: UpdatePhotoInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -356,6 +386,8 @@ export const updatePhoto = `mutation UpdatePhoto($input: UpdatePhotoInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order
@@ -397,6 +429,8 @@ export const deletePhoto = `mutation DeletePhoto($input: DeletePhotoInput!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -414,6 +448,8 @@ export const deletePhoto = `mutation DeletePhoto($input: DeletePhotoInput!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order

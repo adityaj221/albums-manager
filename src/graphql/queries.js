@@ -21,6 +21,8 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -38,6 +40,8 @@ export const getAlbum = `query GetAlbum($id: ID!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -54,6 +58,8 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -85,6 +91,8 @@ export const getAlbum = `query GetAlbum($id: ID!) {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -110,6 +118,8 @@ export const listAlbums = `query ListAlbums(
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -127,6 +137,8 @@ export const listAlbums = `query ListAlbums(
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     nextToken
   }
@@ -151,6 +163,8 @@ export const getPhoto = `query GetPhoto($id: ID!) {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -168,6 +182,8 @@ export const getPhoto = `query GetPhoto($id: ID!) {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order
@@ -211,6 +227,8 @@ export const listPhotos = `query ListPhotos(
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       albumId
       order

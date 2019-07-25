@@ -21,6 +21,8 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -38,6 +40,8 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -54,6 +58,8 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -85,6 +91,8 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -108,6 +116,8 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -125,6 +135,8 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -141,6 +153,8 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -172,6 +186,8 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -195,6 +211,8 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -212,6 +230,8 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     parentId
     children {
@@ -228,6 +248,8 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       nextToken
     }
@@ -259,6 +281,8 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
     createdOn
     publishedOn
     modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `;
@@ -281,6 +305,8 @@ export const onCreatePhoto = `subscription OnCreatePhoto {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -298,6 +324,8 @@ export const onCreatePhoto = `subscription OnCreatePhoto {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order
@@ -339,6 +367,8 @@ export const onUpdatePhoto = `subscription OnUpdatePhoto {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -356,6 +386,8 @@ export const onUpdatePhoto = `subscription OnUpdatePhoto {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order
@@ -397,6 +429,8 @@ export const onDeletePhoto = `subscription OnDeletePhoto {
         createdOn
         publishedOn
         modifiedOn
+        orderBy
+        orderDirection
       }
       parentId
       children {
@@ -414,6 +448,8 @@ export const onDeletePhoto = `subscription OnDeletePhoto {
       createdOn
       publishedOn
       modifiedOn
+      orderBy
+      orderDirection
     }
     albumId
     order

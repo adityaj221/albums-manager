@@ -18,6 +18,8 @@ type Album
   createdOn: AWSDateTime
   publishedOn: AWSDateTime
   modifiedOn: AWSDateTime
+  orderBy: String
+  orderDirection: Direction
 }
 
 type Photo
@@ -58,4 +60,9 @@ enum Visibility {
   public
   private
   protected
+}
+
+enum Direction {
+  asc
+  desc
 }
