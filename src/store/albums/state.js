@@ -1,5 +1,4 @@
 export default {
-  tree: [],
-  treeIndex: {},
+  list: [],
   activeAlbumId: null
 }

@@ -86,10 +86,11 @@ export default {
         return this.$store.state.albums.activeAlbumId
       }
     },
-    albumTree: {
-      get () {
-        return this.$store.state.albums.tree
-      }
+    albumTree () {
+      return this.$store.getters['albums/tree']
+    },
+    albumPath () {
+      return this.$store.getters['albums/path'](this.selected)
     },
     options () {
       let options = []
@@ -111,19 +112,19 @@ export default {
       })
       this.$router.push({ path: `/album/${this.newAlbumId}` })
     },
-    renderOptions (options, tree) {
+    renderOptions (options, tree, depth = 0) {
       for (let i = 0; i < tree.length; i++) {
         let option = {
           label: tree[i].name,
           value: tree[i].id
         }
-        if (tree[i].depth > 0) {
-          let padding = '-'.repeat(tree[i].depth)
+        if (depth > 0) {
+          let padding = '-'.repeat(depth)
           option.label = `${padding} ${tree[i].name}`
         }
         options.push(option)
-        if (tree[i].hasChildren) {
-          options = this.renderOptions(options, tree[i].children)
+        if (tree[i].children && tree[i].children.length > 0) {
+          options = this.renderOptions(options, tree[i].children, depth + 1)
         }
       }
       return options

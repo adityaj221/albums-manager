@@ -1,3 +1,5 @@
+import { extend } from 'quasar'
+
 const listAlbums = `query ListAlbums(
   $filter: ModelAlbumFilterInput
   $limit: Int
@@ -7,12 +9,7 @@ const listAlbums = `query ListAlbums(
     items {
       id
       name
-      children {
-        items {
-          id
-        }
-        nextToken
-      }
+      parentId
     }
     nextToken
   }
@@ -22,9 +19,7 @@ const onCreateAlbum = `subscription OnCreateAlbum {
   onCreateAlbum {
     id
     name
-    parent {
-      id
-    }
+    parentId
   }
 }
 `
@@ -32,9 +27,7 @@ const onUpdateAlbum = `subscription OnUpdateAlbum {
   onUpdateAlbum {
     id
     name
-    parent {
-      id
-    }
+    parentId
   }
 }
 `
@@ -42,93 +35,57 @@ const onUpdateAlbum = `subscription OnUpdateAlbum {
 export default {
   name: 'FetchAlbums',
   beforeMount () {
-    this.listAllAlbums().then(tree => {
-      this.albumTree = tree
+    this.fetchAllAlbums().then(list => {
+      this.albumsList = list
     })
     this.$Amplify.API.graphql(
       this.$Amplify.graphqlOperation(onCreateAlbum)
     ).subscribe({
       next: (albumData) => {
-        this.listAllAlbums().then(tree => {
-          this.albumTree = tree
-        })
+        let item = albumData.value.data.onCreateAlbum
+        let list = extend(true, [], this.albumsList)
+        list.push(item)
+        this.albumsList = list
       }
     })
     this.$Amplify.API.graphql(
       this.$Amplify.graphqlOperation(onUpdateAlbum)
     ).subscribe({
       next: (albumData) => {
-        this.listAllAlbums().then(tree => {
-          this.albumTree = tree
-        })
+        let item = albumData.value.data.onUpdateAlbum
+        let list = extend(true, [], this.albumsList)
+        let index = list.findIndex(x => x.id === item.id)
+        list[index].name = item.name
+        list[index].parentId = item.parentId
+        this.albumsList = list
       }
     })
   },
   methods: {
-    getPath (leaf) {
-      return this.albumTreeIndex[leaf] ? this.getPath(this.albumTreeIndex[leaf]).concat([leaf]) : [leaf]
-    },
-    listAllAlbums (parentId = 'root', depth = 0) {
-      return this.listAllSiblings(parentId)
-        .then((items) => {
-          let getChildrenPromises = []
-          items.forEach(item => {
-            item.depth = depth
-            let getChild = null
-            if (item.hasChildren) {
-              getChild = this.listAllAlbums(item.id, depth + 1).then(res => {
-                item.children = res
-                return item
-              })
-            } else {
-              getChild = Promise.resolve(item)
-            }
-            getChildrenPromises.push(getChild)
-          })
-          return Promise.all(getChildrenPromises)
-        })
-    },
-    listAllSiblings (parentId, nextToken = null) {
-      return this.listSiblings(parentId, nextToken)
+    fetchAllAlbums (nextToken = null) {
+      return this.fetchAlbums(nextToken)
         .then(({ items, nextToken }) => {
-          let itemsClean = items.map(x => {
-            return {
-              id: x.id,
-              name: x.name,
-              hasChildren: (x.children && x.children.items && x.children.items.length > 0)
-            }
-          })
           return nextToken
-            ? this.listAllSiblings(parentId, nextToken)
-              .then(x => itemsClean.concat(x))
-            : itemsClean
+            ? this.fetchAllAlbums(nextToken)
+              .then(x => items.concat(x))
+            : items
         })
     },
-    listSiblings (parentId, nextToken) {
-      let filter = {
-        parentId: {
-          eq: parentId
-        }
-      }
-      let limit = 1000
-      let query = this.$Amplify.graphqlOperation(listAlbums, { limit, nextToken, filter })
+    fetchAlbums (nextToken) {
+      let limit = 2
+      let query = this.$Amplify.graphqlOperation(listAlbums, { limit, nextToken })
       return this.$Amplify.API.graphql(query).then(result => {
         return result.data.listAlbums
       })
     }
   },
   computed: {
-    albumTree: {
+    albumsList: {
       get () {
-        return this.$store.state.albums.tree
+        return this.$store.state.albums.list
       },
       set (val) {
-        this.$store.commit('albums/updateTree', val)
-      }
-    },
-    albumTreeIndex: {
-      get () {
-        return this.$store.state.albums.treeIndex
+        this.$store.commit('albums/updateList', val)
       }
     }
   },

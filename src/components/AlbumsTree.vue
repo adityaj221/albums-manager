@@ -21,9 +21,6 @@ export default {
     }
   },
   methods: {
-    getPath (leaf) {
-      return this.albumTreeIndex[leaf] ? this.getPath(this.albumTreeIndex[leaf]).concat([leaf]) : [leaf]
-    },
     renderBranch (branch) {
       let items = []
       for (let i = 0; i < branch.length; i++) {
@@ -35,7 +32,7 @@ export default {
           expandable: false,
           handler: this.openAlbum
         }
-        if (branch[i].hasChildren) {
+        if ('children' in branch[i]) {
           item.expandable = true
           item.children = this.renderBranch(branch[i].children)
         }
@@ -65,23 +62,16 @@ export default {
         this.$store.commit('albums/setActive', val)
       }
     },
-    albumTree: {
-      get () {
-        return this.$store.state.albums.tree
-      },
-      set (val) {
-        this.$store.commit('albums/updateTree', val)
-      }
+    albumTree () {
+      return this.$store.getters['albums/tree']
     },
-    albumTreeIndex: {
-      get () {
-        return this.$store.state.albums.treeIndex
-      }
+    albumPath () {
+      return this.$store.getters['albums/path'](this.selected)
     },
     renderTree () {
       let tree = this.albumTree
       if (tree && tree.length > 0) {
-        this.setExpanded(this.getPath(this.selected))
+        this.setExpanded(this.albumPath)
         return this.renderBranch(tree)
       } else {
         this.setExpanded([])
