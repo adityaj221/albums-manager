@@ -72,7 +72,7 @@ export default {
         })
     },
     fetchAlbums (nextToken) {
-      let limit = 2
+      let limit = 1000
       let query = this.$Amplify.graphqlOperation(listAlbums, { limit, nextToken })
       return this.$Amplify.API.graphql(query).then(result => {
         return result.data.listAlbums
