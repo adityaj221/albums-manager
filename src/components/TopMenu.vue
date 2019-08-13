@@ -1,17 +1,22 @@
 <template lang="pug">
   .q-gutter-xs.row.items-center.no-wrap
     q-btn.q-ml-sm.q-px-md(
-      v-if="$q.screen.gt.xs"
       flat dense no-wrap no-caps
       icon="add_photo_alternate"
-      label="New Album"
+      :label="$q.screen.gt.xs ? 'New Album' : ''"
       :to="{name: 'newAlbum'}"
     )
     q-btn.q-ml-sm.q-px-md(
-      v-if="$q.screen.gt.xs"
+      flat dense no-wrap no-caps
+      icon="edit"
+      :label="$q.screen.gt.xs ? 'Edit Album' : ''"
+      :to="{path:`/album/${this.activeAlbumId}/edit`}"
+      :disable="(this.activeAlbumId === null)"
+    )
+    q-btn.q-ml-sm.q-px-md(
       flat dense no-wrap no-caps
       icon="cloud_upload"
-      label="Upload"
+      :label="$q.screen.gt.xs ? 'Upload' : ''"
       :disable="(this.activeAlbumId === null)"
     )
 </template>
