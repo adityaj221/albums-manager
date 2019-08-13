@@ -12,18 +12,18 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
-    "aws-amplify": "^1.1.30",
-    "aws-amplify-vue": "^0.2.13",
+    "aws-amplify": "^1.1.36",
+    "aws-amplify-vue": "^0.2.14",
     "aws-appsync": "^1.8.1",
     "quasar": "^1.0.0",
-    "vue-i18n": "^8.0.0"
+    "vue-i18n": "^8.14.0"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",
     "@quasar/quasar-app-extension-icon-genie": "^1.0.1",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.10.0",
+    "eslint": "^6.1.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "pug": "^2.0.4",
