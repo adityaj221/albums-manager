@@ -1,23 +1,31 @@
 <template lang="pug">
-  q-layout(view="hhh LpR fff")
-    q-header(elevated)
+  q-layout(view="hHh LpR fFf")
+    q-header(elevated reveal)
       q-toolbar
-        q-btn(
+        q-btn.q-mr-sm(
           flat
           dense
           round
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
           icon="menu"
-          class="q-mx-md"
         )
 
-        q-toolbar-title.row.items-center.no-wrap(v-if="$q.screen.gt.sm" shrink)
-          span.q-ml-sm Yapawa
+        q-btn.text-bold(
+          key="logo"
+          flat
+          no-caps
+          no-wrap
+          stretch
+          :to="{name: 'home'}"
+        )
+          q-avatar
+            img(src="~assets/yapawa-logo.svg")
+          q-toolbar-title(shrink) Yapawa - Content Management
 
         q-space
-        top-menu
-        q-space
+
+        top-menu.self-stretch.row.no-wrap(v-if="$q.screen.gt.xs")
 
         .q-gutter-sm.row.items-center.no-wrap
           q-btn(round dense flat icon="notifications")
@@ -49,7 +57,7 @@
     q-page-container
       router-view
 
-    q-footer
+    q-footer(reveal)
       .text-right.q-pr-sm.text-caption Quasar v{{ $q.version }}
     fetch-albums
 </template>
