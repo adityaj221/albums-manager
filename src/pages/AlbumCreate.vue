@@ -10,11 +10,14 @@
             div(v-else-if="errors.length > 0") {{errors}}
             div.q-gutter-md(v-else)
               q-input(
+                dark
+                filled
                 v-model="name"
                 :value="name"
                 label="Name"
               )
               q-input(
+                dark
                 v-model="description"
                 :value="description"
                 filled
@@ -22,6 +25,8 @@
                 label="Description"
               )
               q-select(
+                dark
+                filled
                 options-dense
                 v-model="parentAlbum"
                 :value="parentAlbum"
@@ -30,7 +35,7 @@
                 emit-value
                 map-options
               )
-              q-btn(color="primary" label="Create" :disabled="btnStatus" @click="mutate")
+              q-btn(color="accent" label="Create" :disabled="btnStatus" @click="mutate")
 </template>
 
 <script>

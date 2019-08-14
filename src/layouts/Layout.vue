@@ -1,6 +1,6 @@
 <template lang="pug">
-  q-layout(view="hHh LpR fFf")
-    q-header(elevated reveal)
+  q-layout.bg-grey-10.text-grey-1(view="hHh LpR fFf")
+    q-header.bg-grey-9(elevated reveal)
       q-toolbar
         q-btn.q-mr-sm(
           flat
@@ -21,7 +21,7 @@
         )
           q-avatar
             img(src="~assets/yapawa-logo.svg")
-          q-toolbar-title(shrink) Yapawa - Content Management
+          q-toolbar-title(shrink v-if="$q.screen.gt.xs") Yapawa - Content Management
 
         q-space
 
@@ -46,18 +46,40 @@
                     q-icon(name="exit_to_app")
                   q-item-section
                     q-item-label Logout
+
     q-drawer(
       v-model="leftDrawerOpen"
-      bordered
-      content-class="bg-grey-2"
+      side="left"
+      content-class="bg-grey-9"
     )
       q-scroll-area(style="height: 100%")
-        app-menu.q-my-lg
+        app-menu
+
+    q-drawer(
+      v-model="rightDrawerOpen"
+      :mini="miniState"
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
+      mini-to-overlay
+      shown-if-above
+      :mini-width="24"
+      side="right"
+      behavior="desktop"
+      content-class="bg-grey-9"
+      content-style="overflow-x: hidden"
+      v-if="this.showEdit"
+    )
+      q-icon.q-mini-drawer-only(
+        name="chevron_left"
+        style="font-size: 1.8em"
+      )
+      q-scroll-area.q-mini-drawer-hide(style="height: 100%")
+        edit-item
 
     q-page-container
       router-view
 
-    q-footer(reveal)
+    q-footer.bg-grey-8(reveal)
       .text-right.q-pr-sm.text-caption Quasar v{{ $q.version }}
     fetch-albums
 </template>
@@ -66,18 +88,29 @@
 import AppMenu from 'components/AppMenu'
 import TopMenu from 'components/TopMenu'
 import FetchAlbums from 'components/FetchAlbums'
+import EditItem from 'components/EditItem'
 
 export default {
   name: 'Layout',
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      rightDrawerOpen: true,
+      miniState: true
     }
   },
   components: {
     AppMenu,
     TopMenu,
-    FetchAlbums
+    FetchAlbums,
+    EditItem
+  },
+  computed: {
+    showEdit: {
+      get () {
+        return this.$store.state.albums.showEdit
+      }
+    }
   },
   methods: {
     async signOut () {

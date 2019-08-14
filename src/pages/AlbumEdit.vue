@@ -13,22 +13,29 @@
             div(v-else-if="errors.length > 0") {{errors}}
             div.q-gutter-md(v-else)
               q-input(
+                dark
+                filled
                 v-model="name"
                 :value="name"
                 label="Name"
               )
               q-input(
+                dark
+                filled
                 v-model="slug"
                 :value="slug"
                 label="Slug"
               )
               q-input(
+                dark
+                filled
                 v-model="order"
                 :value="order"
                 label="Order"
                 type="number"
               )
               q-input(
+                dark
                 v-model="description"
                 :value="description"
                 filled
@@ -36,6 +43,7 @@
                 label="Description"
               )
               q-input(
+                dark
                 v-model="summary"
                 :value="summary"
                 filled
@@ -43,6 +51,8 @@
                 label="Summary"
               )
               q-select(
+                dark
+                filled
                 options-dense
                 v-model="parentAlbum"
                 :value="parentAlbum"
@@ -52,26 +62,34 @@
                 map-options
               )
               q-input(
+                dark
+                filled
                 v-model="visibility"
                 :value="visibility"
                 label="Visibility"
               )
               q-input(
+                dark
+                filled
                 v-model="status"
                 :value="status"
                 label="Status"
               )
               q-input(
+                dark
+                filled
                 v-model="createdOn"
                 :value="createdOn"
                 label="Created"
               )
               q-input(
+                dark
+                filled
                 v-model="modifiedOn"
                 :value="modifiedOn"
                 label="Modified"
               )
-              q-btn(color="primary" label="Save" :disabled="btnStatus" @click="mutate")
+              q-btn(color="accent" label="Save" :disabled="btnStatus" @click="mutate")
 </template>
 
 <script>

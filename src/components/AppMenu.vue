@@ -1,9 +1,8 @@
 <template lang="pug">
-  q-list
-    div(v-if="signedIn")
-      q-item-label(header) Albums
-      q-item
-        albums-tree
+  q-list(dark v-if="signedIn")
+    q-item-label(header) Albums
+    q-item
+      albums-tree
 </template>
 
 <script>

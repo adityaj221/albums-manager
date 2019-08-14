@@ -20,12 +20,15 @@ export default {
   name: 'Album',
   created () {
     this.albumId = this.$route.params.id
+    this.showEdit = true
   },
   beforeRouteUpdate (to, from, next) {
     this.albumId = to.params.id
+    this.showEdit = true
     next()
   },
   beforeDestroy () {
+    this.showEdit = false
     // this.albumId = null
   },
   computed: {
@@ -41,6 +44,14 @@ export default {
       },
       set (val) {
         this.$store.commit('albums/setActive', val)
+      }
+    },
+    showEdit: {
+      get () {
+        return this.$store.state.albums.showEdit
+      },
+      set (val) {
+        this.$store.commit('albums/updateShowEdit', val)
       }
     }
   },
