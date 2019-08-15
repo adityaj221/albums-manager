@@ -1,6 +1,5 @@
 <template lang='pug'>
-  div(v-if="loading") Loading...
-  q-list(dark v-if="signedIn && item")
+  q-list(dark v-if="signedIn && item && item.data")
     q-expansion-item(
       dense
       default-opened
@@ -24,17 +23,26 @@
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="item.name"
-            :value="item.name"
+            v-model="item.data.name"
+            :value="item.data.name"
             label="Name"
           )
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="item.description"
-            :value="item.description"
+            v-model="item.data.description"
+            :value="item.data.description"
             label="Description"
+            type="textarea"
+          )
+          q-input(
+            dark
+            dense
+            standout="bg-grey-5 text-grey-8"
+            v-model="item.data.summary"
+            :value="item.data.summary"
+            label="Summary"
             type="textarea"
           )
     q-expansion-item(
@@ -51,9 +59,25 @@
             dense
             dark
             standout="bg-grey-5 text-grey-8"
-            v-model="item.slug"
-            :value="item.slug"
+            v-model="item.data.slug"
+            :value="item.data.slug"
             label="Slug"
+          )
+          q-input(
+            dense
+            dark
+            standout="bg-grey-5 text-grey-8"
+            v-model="item.data.visibility"
+            :value="item.data.visibility"
+            label="Visibility"
+          )
+          q-input(
+            dense
+            dark
+            standout="bg-grey-5 text-grey-8"
+            v-model="item.data.status"
+            :value="item.data.status"
+            label="Status"
           )
     q-expansion-item(
       default-opened
@@ -69,22 +93,27 @@
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="item.createdOn"
-            :value="item.createdOn"
-            label="created"
+            v-model="item.data.createdOn"
+            :value="item.data.createdOn"
+            label="Created"
+          )
+          q-input(
+            dark
+            dense
+            standout="bg-grey-5 text-grey-8"
+            v-model="item.data.modifiedOn"
+            :value="item.data.modifiedOn"
+            label="Modified"
           )
 </template>
 
 <script>
-import { getAlbum } from '../graphql/queries'
 
 export default {
   name: 'EditItem',
   data () {
     return {
-      signedIn: false,
-      item: null,
-      loading: null
+      signedIn: false
     }
   },
   computed: {
@@ -92,23 +121,12 @@ export default {
       get () {
         return this.$store.state.albums.activeAlbumId
       }
+    },
+    item: {
+      get () {
+        return this.$store.state.albums.editItem
+      }
     }
-  },
-  created () {
-    this.fetchAlbum()
-  },
-  methods: {
-    fetchAlbum () {
-      this.loading = true
-      let query = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId })
-      this.$Amplify.API.graphql(query).then(res => {
-        this.loading = false
-        this.item = res.data.getAlbum
-      })
-    }
-  },
-  watch: {
-    'albumId': 'fetchAlbum'
   },
   beforeCreate () {
     this.$Auth.currentAuthenticatedUser()

@@ -67,7 +67,7 @@
       behavior="desktop"
       content-class="bg-grey-9"
       content-style="overflow-x: hidden"
-      v-if="this.showEdit"
+      v-if="showEdit"
     )
       q-icon.q-mini-drawer-only(
         name="chevron_left"
@@ -106,10 +106,8 @@ export default {
     EditItem
   },
   computed: {
-    showEdit: {
-      get () {
-        return this.$store.state.albums.showEdit
-      }
+    showEdit () {
+      return this.$store.getters['albums/showEdit']
     }
   },
   methods: {

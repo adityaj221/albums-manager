@@ -1,43 +1,40 @@
 <template lang="pug">
   q-page(padding)
-    amplify-connect(
-      :query="getAlbumQuery",
-      :subscription="createPhotoSubscription",
-      :onSubscriptionMsg="onCreatePhotoMsg"
-    )
-      template(slot-scope="{loading, data, errors}")
-        div(v-if="loading")
-        div(v-else-if="errors.length > 0")
-        div(v-else-if="data")
-          h1 {{ data.getAlbum.name }}
+    div.text-center(v-if="loading")
+      q-spinner(color="primary" size="3em")
+    div(v-else-if="errors.length > 0" class="bg-negative")
+      div.q-pa-md
+        strong Errors:
+        ul
+          li(v-for="error in errors" :key="error") {{error}}
+    div(v-else-if="album")
+      h1 {{ album.name }}
 </template>
 
 <script>
 import { getAlbum } from '../graphql/queries'
-import { onCreatePhoto } from '../graphql/subscriptions'
 
 export default {
   name: 'Album',
+  data () {
+    return {
+      album: {},
+      loading: false,
+      errors: []
+    }
+  },
   created () {
-    this.albumId = this.$route.params.id
-    this.showEdit = true
+    this.fetchAlbum(this.$route.params.id)
   },
   beforeRouteUpdate (to, from, next) {
-    this.albumId = to.params.id
-    this.showEdit = true
+    this.fetchAlbum(to.params.id)
     next()
   },
   beforeDestroy () {
-    this.showEdit = false
+    this.editItem = null
     // this.albumId = null
   },
   computed: {
-    getAlbumQuery () {
-      return this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId })
-    },
-    createPhotoSubscription () {
-      return this.$Amplify.graphqlOperation(onCreatePhoto)
-    },
     albumId: {
       get () {
         return this.$store.state.albums.activeAlbumId
@@ -46,21 +43,33 @@ export default {
         this.$store.commit('albums/setActive', val)
       }
     },
-    showEdit: {
+    editItem: {
       get () {
-        return this.$store.state.albums.showEdit
+        return this.$store.state.albums.editItem
       },
       set (val) {
-        this.$store.commit('albums/updateShowEdit', val)
+        this.$store.commit('albums/setEditItem', val)
       }
     }
   },
   methods: {
-    onCreatePhotoMsg (prevData, newData) {
-      const newPhoto = newData.onCreatePhoto
-      delete newPhoto.album
-      prevData.data.getAlbum.photos.items.push(newPhoto)
-      return prevData.data
+    fetchAlbum (albumId) {
+      this.albumId = albumId
+      this.loading = true
+      let getAlbumQuery = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId })
+      this.$Amplify.API.graphql(getAlbumQuery).then(result => {
+        this.album = result.data.getAlbum
+        this.editItem = {
+          type: 'album',
+          itemId: this.albumId,
+          data: this.album
+        }
+        this.loading = false
+      }).catch(err => {
+        this.loading = false
+        this.album = null
+        this.errors = err.errors
+      })
     }
   }
 }

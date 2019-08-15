@@ -8,13 +8,6 @@
     )
     q-btn.q-ml-sm.q-px-md(
       flat dense no-wrap no-caps
-      icon="edit"
-      :label="$q.screen.gt.xs ? 'Edit Album' : ''"
-      :to="{path:`/album/${this.activeAlbumId}/edit`}"
-      :disable="(this.activeAlbumId === null)"
-    )
-    q-btn.q-ml-sm.q-px-md(
-      flat dense no-wrap no-caps
       icon="cloud_upload"
       :label="$q.screen.gt.xs ? 'Upload' : ''"
       :disable="(this.activeAlbumId === null)"

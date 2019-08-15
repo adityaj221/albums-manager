@@ -46,3 +46,10 @@ export const path = state => {
   }
   return leaf => getPath(index, leaf)
 }
+
+export const showEdit = state => {
+  if (state.editItem && state.editItem.type && state.editItem.itemId) {
+    return true
+  }
+  return false
+}
