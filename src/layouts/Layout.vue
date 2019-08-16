@@ -61,8 +61,9 @@
       @mouseover="miniState = false"
       @mouseout="miniState = true"
       mini-to-overlay
-      shown-if-above
+      show-if-above
       :mini-width="24"
+      :breakpoint="250"
       side="right"
       behavior="desktop"
       content-class="bg-grey-9"
