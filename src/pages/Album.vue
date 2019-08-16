@@ -6,7 +6,7 @@
       div.q-pa-md
         strong Errors:
         ul
-          li(v-for="error in errors" :key="error") {{error}}
+          li(v-for="error in errors" :key="error") {{error.message}}
     div(v-else-if="album")
       h1 {{ album.name }}
 </template>
