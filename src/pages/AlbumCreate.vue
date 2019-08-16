@@ -41,6 +41,7 @@
 <script>
 import { createAlbum } from '../graphql/mutations'
 import { date, uid } from 'quasar'
+const slugify = require('slugify')
 
 export default {
   name: 'AlbumCreate',
@@ -59,7 +60,7 @@ export default {
     createAlbumMutation () {
       let summary = this.description
       let order = 1
-      let slug = this.name
+      let slug = slugify(this.name)
       let timestamp = Date.now()
       let createdOn = date.formatDate(timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
       let parentId = this.parentAlbum
