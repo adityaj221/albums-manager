@@ -13,6 +13,7 @@
 
 <script>
 import { getAlbum } from '../graphql/queries'
+import { onUpdateAlbum } from '../graphql/subscriptions'
 
 export default {
   name: 'Album',
@@ -25,6 +26,19 @@ export default {
   },
   created () {
     this.fetchAlbum(this.$route.params.id)
+    this.$Amplify.API.graphql(
+      this.$Amplify.graphqlOperation(onUpdateAlbum)
+    ).subscribe({
+      next: (albumData) => {
+        let item = albumData.value.data.onUpdateAlbum
+        this.album = item
+        this.editItem = {
+          type: 'album',
+          itemId: item.id,
+          data: item
+        }
+      }
+    })
   },
   beforeRouteUpdate (to, from, next) {
     this.fetchAlbum(to.params.id)

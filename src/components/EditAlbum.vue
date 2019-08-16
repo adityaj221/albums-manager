@@ -1,5 +1,5 @@
 <template lang='pug'>
-  q-list(dark v-if="signedIn && album && album.data")
+  q-list(dark v-if="signedIn && album")
     q-expansion-item(
       dense
       default-opened
@@ -23,27 +23,30 @@
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.name"
-            :value="album.data.name"
+            v-model="album.name"
+            :value="album.name"
             label="Name"
+            @change="save(['name'])"
           )
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.description"
-            :value="album.data.description"
+            v-model.lazy="album.description"
+            :value="album.description"
             label="Description"
             type="textarea"
+            @change="save(['description'])"
           )
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.summary"
-            :value="album.data.summary"
+            v-model="album.summary"
+            :value="album.summary"
             label="Summary"
             type="textarea"
+            @change="save(['summary'])"
           )
     q-expansion-item(
       default-opened
@@ -59,9 +62,11 @@
             dense
             dark
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.slug"
-            :value="album.data.slug"
+            v-model="slug"
+            :value="slug"
             label="Slug"
+            debounce="1000"
+            @change="save(['slug'])"
           )
           q-select(
             dense
@@ -70,10 +75,11 @@
             options-dark
             options-selected-class="text-accent"
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.visibility"
-            :value="album.data.visibility"
+            v-model="album.visibility"
+            :value="album.visibility"
             label="Visibility"
             :options="enumValues.visibility"
+            @change="save(['visibility'])"
           )
           q-select(
             dense
@@ -82,10 +88,11 @@
             options-dark
             options-selected-class="text-accent"
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.status"
-            :value="album.data.status"
+            v-model="album.status"
+            :value="album.status"
             label="Status"
             :options="enumValues.status"
+            @change="save(['status'])"
           )
     q-expansion-item(
       default-opened
@@ -101,28 +108,75 @@
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.createdOn"
-            :value="album.data.createdOn"
+            v-model="album.createdOn"
+            :value="album.createdOn"
             label="Created"
+            @change="save(['createdOn'])"
           )
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.data.modifiedOn"
-            :value="album.data.modifiedOn"
+            v-model="album.modifiedOn"
+            :value="album.modifiedOn"
             label="Modified"
           )
 </template>
 
 <script>
 const schema = require('../graphql/schema.json')
+const slugify = require('slugify')
+import { updateAlbum } from '../graphql/mutations'
+import { extend, date } from 'quasar'
 
 export default {
   name: 'EditAlbum',
   data () {
     return {
-      signedIn: false
+      signedIn: false,
+      album: {}
+    }
+  },
+  created () {
+    this.album = extend({}, this.item.data)
+  },
+  watch: {
+    item () {
+      this.album = extend({}, this.item.data)
+    }
+  },
+  methods: {
+    save (fields) {
+      let input = {
+        id: this.item.itemId,
+        modifiedOn: date.formatDate(Date.now(), 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+      }
+      fields.forEach(field => {
+        let value = this.album[field].trim()
+        input[field] = (value === '') ? null : value
+      })
+      let updateQuery = this.$Amplify.graphqlOperation(updateAlbum, { input: input })
+      this.$Amplify.API.graphql(updateQuery).then(result => {
+        this.$q.notify({
+          message: 'Value saved',
+          color: 'positive',
+          timeout: 2000,
+          position: 'top-right'
+        })
+      }).catch(err => {
+        let message = '<b>Error while saving field</b>:<br><ul>'
+        err.errors.forEach(e => {
+          message += `<li>${e.message}</li>`
+        })
+        message += '</ul>'
+        this.$q.notify({
+          message,
+          html: true,
+          color: 'negative',
+          timeout: 5000,
+          position: 'bottom-right'
+        })
+      })
     }
   },
   computed: {
@@ -139,9 +193,17 @@ export default {
         return this.$store.state.albums.activeAlbumId
       }
     },
-    album: {
+    item: {
       get () {
         return this.$store.state.albums.editItem
+      }
+    },
+    slug: {
+      get () {
+        return this.album.slug
+      },
+      set (val) {
+        this.album.slug = slugify(val)
       }
     }
   },
