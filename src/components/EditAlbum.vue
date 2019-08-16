@@ -174,7 +174,7 @@ export default {
           html: true,
           color: 'negative',
           timeout: 5000,
-          position: 'bottom-right'
+          position: 'top-right'
         })
       })
     }
