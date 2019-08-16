@@ -63,21 +63,29 @@
             :value="album.data.slug"
             label="Slug"
           )
-          q-input(
+          q-select(
             dense
             dark
+            options-dense
+            options-dark
+            options-selected-class="text-accent"
             standout="bg-grey-5 text-grey-8"
             v-model="album.data.visibility"
             :value="album.data.visibility"
             label="Visibility"
+            :options="enumValues.visibility"
           )
-          q-input(
+          q-select(
             dense
             dark
+            options-dense
+            options-dark
+            options-selected-class="text-accent"
             standout="bg-grey-5 text-grey-8"
             v-model="album.data.status"
             :value="album.data.status"
             label="Status"
+            :options="enumValues.status"
           )
     q-expansion-item(
       default-opened
@@ -108,6 +116,7 @@
 </template>
 
 <script>
+const schema = require('../graphql/schema.json')
 
 export default {
   name: 'EditAlbum',
@@ -117,6 +126,14 @@ export default {
     }
   },
   computed: {
+    enumValues () {
+      let values = {}
+      schema.data.__schema.types.filter(item => item.kind === 'ENUM' && !item.name.startsWith('__')).forEach(item => {
+        let vals = item.enumValues.map(e => { return e.name })
+        values[item.name.toLowerCase()] = vals
+      })
+      return values
+    },
     albumId: {
       get () {
         return this.$store.state.albums.activeAlbumId

@@ -58,8 +58,8 @@
     q-drawer(
       v-model="rightDrawerOpen"
       :mini="miniState"
-      @mouseover="miniState = false"
-      @mouseout="miniState = true"
+      /* @mouseover="miniState = false"
+      @mouseout="miniState = true" */
       mini-to-overlay
       show-if-above
       :mini-width="24"
@@ -73,8 +73,14 @@
       q-icon.q-mini-drawer-only(
         name="chevron_left"
         style="font-size: 1.8em"
+        @click="miniState = false"
       )
       q-scroll-area.q-mini-drawer-hide(style="height: 100%")
+        q-icon(
+          name="chevron_right"
+          style="font-size: 1.8em"
+          @click="miniState = true"
+        )
         edit-item
 
     q-page-container
