@@ -17,7 +17,7 @@
       label="Properties"
       header-class="text-uppercase"
     )
-      .q-pa-md
+      .q-pa-md(:icon-status="ongoingChange")
         .q-gutter-md
           q-input(
             dark
@@ -26,8 +26,14 @@
             v-model="album.name"
             :value="album.name"
             label="Name"
-            @change="save(['name'])"
+            @input="modified('name')"
+            @change="save('name')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['name'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['name'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['name'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['name'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
@@ -36,8 +42,14 @@
             :value="album.description"
             label="Description"
             type="textarea"
-            @change="save(['description'])"
+            @input="modified('description')"
+            @change="save('description')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['description'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['description'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['description'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['description'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
@@ -46,8 +58,14 @@
             :value="album.summary"
             label="Summary"
             type="textarea"
-            @change="save(['summary'])"
+            @input="modified('summary')"
+            @change="save('summary')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['summary'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['summary'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['summary'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['summary'] === 'error'" name="error" color="error")
     q-expansion-item(
       default-opened
       dense
@@ -66,8 +84,14 @@
             :value="slug"
             label="Slug"
             debounce="1000"
-            @change="save(['slug'])"
+            @input="modified('slug')"
+            @change="save('slug')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['slug'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['slug'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['slug'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['slug'] === 'error'" name="error" color="error")
           q-select(
             dense
             dark
@@ -79,8 +103,13 @@
             :value="album.visibility"
             label="Visibility"
             :options="enumValues.visibility"
-            @change="save(['visibility'])"
+            @input="modified('visibility');save('visibility')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['visibility'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['visibility'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['visibility'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['visibility'] === 'error'" name="error" color="error")
           q-select(
             dense
             dark
@@ -92,8 +121,13 @@
             :value="album.status"
             label="Status"
             :options="enumValues.status"
-            @change="save(['status'])"
+            @input="modified('status');save('status')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['status'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['status'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['status'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['status'] === 'error'" name="error" color="error")
     q-expansion-item(
       default-opened
       dense
@@ -111,8 +145,14 @@
             v-model="album.createdOn"
             :value="album.createdOn"
             label="Created"
-            @change="save(['createdOn'])"
+            @input="modified('createdOn')"
+            @change="save('createdOn')"
           )
+            template(v-slot:append)
+              q-icon(v-if="fieldStates['createdOn'] === 'saved'" name="done" color="positive")
+              q-icon(v-if="fieldStates['createdOn'] === 'modified'" name="help" color="warning")
+              q-icon(v-if="fieldStates['createdOn'] === 'saving'" name="save" color="warning")
+              q-icon(v-if="fieldStates['createdOn'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
@@ -134,7 +174,9 @@ export default {
   data () {
     return {
       signedIn: false,
-      album: {}
+      album: {},
+      fieldStates: {},
+      ongoingChange: false
     }
   },
   created () {
@@ -146,17 +188,27 @@ export default {
     }
   },
   methods: {
-    save (fields) {
+    modified (field) {
+      this.ongoingChange = true
+      if (this.album[field] !== this.item.data[field]) {
+        this.setFieldStatus(field, 'modified')
+      } else {
+        this.setFieldStatus(field)
+      }
+    },
+    save (field) {
       let input = {
         id: this.item.itemId,
         modifiedOn: date.formatDate(Date.now(), 'YYYY-MM-DDTHH:mm:ss.SSSZ')
       }
-      fields.forEach(field => {
-        let value = this.album[field].trim()
-        input[field] = (value === '') ? null : value
-      })
+      let value = this.album[field].trim()
+      input[field] = (value === '') ? null : value
+      this.setFieldStatus(field, 'saving')
+
       let updateQuery = this.$Amplify.graphqlOperation(updateAlbum, { input: input })
       this.$Amplify.API.graphql(updateQuery).then(result => {
+        this.setFieldStatus(field, 'saved')
+        setTimeout(this.setFieldStatus.bind(this), 2500, field)
         this.$q.notify({
           message: 'Value saved',
           color: 'positive',
@@ -164,6 +216,7 @@ export default {
           position: 'top-right'
         })
       }).catch(err => {
+        this.setFieldStatus(field, 'error')
         let message = '<b>Error while saving field</b>:<br><ul>'
         err.errors.forEach(e => {
           message += `<li>${e.message}</li>`
@@ -177,6 +230,12 @@ export default {
           position: 'top-right'
         })
       })
+    },
+    setFieldStatus (field, value = '') {
+      this.fieldStates[field] = value
+      if (value === '') {
+        this.ongoingChange = false
+      }
     }
   },
   computed: {
