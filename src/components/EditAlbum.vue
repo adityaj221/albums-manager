@@ -1,39 +1,27 @@
 <template lang='pug'>
   q-list(dark v-if="signedIn && album")
-    q-expansion-item(
-      dense
-      default-opened
-      switch-toggle-side
-      expand-separator
-      label="Covers"
-      header-class="text-uppercase"
-    )
+    q-expansion-item(label="Covers" v-bind="expansionItemStyle")
 
-    q-expansion-item(
-      dense
-      default-opened
-      switch-toggle-side
-      expand-separator
-      label="Properties"
-      header-class="text-uppercase"
-    )
+    q-expansion-item(label="Properties" v-bind="expansionItemStyle")
       .q-pa-md(:icon-status="ongoingChange")
         .q-gutter-md
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.name"
+            v-model.lazy="album.name"
             :value="album.name"
             label="Name"
             @input="modified('name')"
-            @change="save('name')"
+            @keyup.esc="revert('name')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['name'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['name'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['name'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['name'] === 'error'" name="error" color="error")
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['name'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['name'] === 'modified'" name="cancel" @click="revert('name')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['name'] === 'modified'" name="save" @click="save('name')")
+                q-icon.col(v-if="fieldStates['name'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['name'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
@@ -42,14 +30,16 @@
             :value="album.description"
             label="Description"
             type="textarea"
+            @keyup.esc="revert('description')"
             @input="modified('description')"
-            @change="save('description')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['description'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['description'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['description'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['description'] === 'error'" name="error" color="error")
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['description'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['description'] === 'modified'" name="cancel" @click="revert('description')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['description'] === 'modified'" name="save" @click="save('description')")
+                q-icon.col(v-if="fieldStates['description'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['description'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
@@ -59,21 +49,16 @@
             label="Summary"
             type="textarea"
             @input="modified('summary')"
-            @change="save('summary')"
+            @keyup.esc="revert('summary')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['summary'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['summary'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['summary'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['summary'] === 'error'" name="error" color="error")
-    q-expansion-item(
-      default-opened
-      dense
-      switch-toggle-side
-      expand-separator
-      label="Site"
-      header-class="text-uppercase"
-    )
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['summary'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['summary'] === 'modified'" name="save" @click="save('summary')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['summary'] === 'modified'" name="cancel" @click="reset('summary')")
+                q-icon.col(v-if="fieldStates['summary'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['summary'] === 'error'" name="error" color="error")
+    q-expansion-item(label="Site" v-bind="expansionItemStyle")
       .q-pa-md
         .q-gutter-md
           q-input(
@@ -85,13 +70,15 @@
             label="Slug"
             debounce="1000"
             @input="modified('slug')"
-            @change="save('slug')"
+            @keyup.esc="revert('slug')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['slug'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['slug'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['slug'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['slug'] === 'error'" name="error" color="error")
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['slug'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['slug'] === 'modified'" name="save" @click="save('slug')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['slug'] === 'modified'" name="cancel" @click="revert('slug')")
+                q-icon.col(v-if="fieldStates['slug'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['slug'] === 'error'" name="error" color="error")
           q-select(
             dense
             dark
@@ -103,13 +90,16 @@
             :value="album.visibility"
             label="Visibility"
             :options="enumValues.visibility"
-            @input="modified('visibility');save('visibility')"
+            @input="modified('visibility')"
+            @keyup.esc="revert('visibility')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['visibility'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['visibility'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['visibility'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['visibility'] === 'error'" name="error" color="error")
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['visibility'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['visibility'] === 'modified'" name="save" @click="save('visibility')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['visibility'] === 'modified'" name="cancel" @click="revert('visibility')")
+                q-icon.col(v-if="fieldStates['visibility'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['visibility'] === 'error'" name="error" color="error")
           q-select(
             dense
             dark
@@ -121,45 +111,55 @@
             :value="album.status"
             label="Status"
             :options="enumValues.status"
-            @input="modified('status');save('status')"
+            @input="modified('status')"
+            @keyup.esc="revert('status')"
           )
-            template(v-slot:append)
-              q-icon(v-if="fieldStates['status'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['status'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['status'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['status'] === 'error'" name="error" color="error")
-    q-expansion-item(
-      default-opened
-      dense
-      switch-toggle-side
-      expand-separator
-      label="History"
-      header-class="text-uppercase"
-    )
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['status'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['status'] === 'modified'" name="save" @click="save('status')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['status'] === 'modified'" name="cancel" @click="revert('status')")
+                q-icon.col(v-if="fieldStates['status'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['status'] === 'error'" name="error" color="error")
+    q-expansion-item(label="History" v-bind="expansionItemStyle")
       .q-pa-md
         .q-gutter-md
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.createdOn"
-            :value="album.createdOn"
+            v-model="createdOn"
+            :value="createdOn"
             label="Created"
+            mask="####-##-## ##:##:##"
             @input="modified('createdOn')"
-            @change="save('createdOn')"
+            @change="modified('createdOn')"
+            @keyup.esc="revert('createdOn')"
           )
+            template(v-slot:prepend)
+              q-icon.cursor-pointer(name="event")
+                q-popup-proxy(transition-show="scale" transition-hide="scale")
+                  q-date(dark color="accent" v-model="createdOn" mask="YYYY-MM-DD HH:mm:ss" today-btn)
+
             template(v-slot:append)
-              q-icon(v-if="fieldStates['createdOn'] === 'saved'" name="done" color="positive")
-              q-icon(v-if="fieldStates['createdOn'] === 'modified'" name="help" color="warning")
-              q-icon(v-if="fieldStates['createdOn'] === 'saving'" name="save" color="warning")
-              q-icon(v-if="fieldStates['createdOn'] === 'error'" name="error" color="error")
+              q-icon.cursor-pointer(name="access_time")
+                q-popup-proxy(transition-show="scale" transition-hide="scale")
+                  q-time(dark color="accent" minimal v-model="createdOn" mask="YYYY-MM-DD HH:mm:ss" format24h with-seconds now-btn)
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['createdOn'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['createdOn'] === 'modified'" name="save" @click="save('createdOn', true)")
+                q-icon.col.cursor-pointer(v-if="fieldStates['createdOn'] === 'modified'" name="cancel" @click="revert('createdOn')")
+                q-icon.col(v-if="fieldStates['createdOn'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['createdOn'] === 'error'" name="error" color="error")
           q-input(
             dark
             dense
             standout="bg-grey-5 text-grey-8"
-            v-model="album.modifiedOn"
-            :value="album.modifiedOn"
-            label="Modified"
+            v-model="modifiedOn"
+            :value="modifiedOn"
+            label="Last Modified"
+            readonly
           )
 </template>
 
@@ -176,15 +176,27 @@ export default {
       signedIn: false,
       album: {},
       fieldStates: {},
-      ongoingChange: false
+      ongoingChange: false,
+      expansionItemStyle: {
+        dense: true,
+        'default-opened': true,
+        'switch-toggle-side': true,
+        'expand-separator': true,
+        'header-class': 'text-uppercase'
+      },
+      inputStyle: {
+
+      }
     }
   },
   created () {
     this.album = extend({}, this.item.data)
+    this.fieldStates = {}
   },
   watch: {
     item () {
       this.album = extend({}, this.item.data)
+      this.fieldStates = {}
     }
   },
   methods: {
@@ -196,7 +208,11 @@ export default {
         this.setFieldStatus(field)
       }
     },
-    save (field) {
+    revert (field) {
+      this.album[field] = this.item.data[field]
+      this.setFieldStatus(field)
+    },
+    save (field, isDate = false) {
       let input = {
         id: this.item.itemId,
         modifiedOn: date.formatDate(Date.now(), 'YYYY-MM-DDTHH:mm:ss.SSSZ')
@@ -263,6 +279,20 @@ export default {
       },
       set (val) {
         this.album.slug = slugify(val)
+      }
+    },
+    createdOn: {
+      get () {
+        return date.formatDate(this.album.createdOn, 'YYYY-MM-DD HH:mm:ss')
+      },
+      set (val) {
+        this.album.createdOn = date.formatDate(val, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
+        this.modified('createdOn')
+      }
+    },
+    modifiedOn: {
+      get () {
+        return date.formatDate(this.album.modifiedOn, 'YYYY-MM-DD HH:mm:ss')
       }
     }
   },
