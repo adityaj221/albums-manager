@@ -33,8 +33,8 @@
             q-tooltip Notifications
           q-btn(round dense flat icon="account_circle")
             q-tooltip Account
-            q-menu
-              q-list
+            q-menu(content-class="bg-grey-8")
+              q-list(dark)
                 q-item(clickable :to="{name: 'profile'}")
                   q-item-section(avatar)
                     q-icon(name="settings")
