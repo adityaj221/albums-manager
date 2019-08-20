@@ -4,9 +4,9 @@ type Album
 {
   id: ID!
   name: String!
-  parent: Album @connection(name: "AlbumAlbums", keyField: "parentId")
+  parent: Album @connection(name: "AlbumAlbums", keyField: "parentId", sortField: "createdOn")
   parentId: ID!
-  children: [Album] @connection(name: "AlbumAlbums", keyField: "parentId")
+  children: [Album] @connection(name: "AlbumAlbums", keyField: "parentId", sortField: "createdOn")
   photos: [Photo] @connection(name: "AlbumPhotos", keyField: "albumId")
   order: Int
   slug: String
