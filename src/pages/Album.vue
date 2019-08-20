@@ -8,7 +8,10 @@
         ul
           li(v-for="error in errors" :key="error") {{error.message}}
     div(v-else-if="album")
-      h1 {{ album.name }}
+      .text-h5 {{ album.name }}
+      .row
+        div.q-pa-md(v-for="item in children")
+          q-item(:to="{ path: `/album/${item.id}` }") {{item.name}}
 </template>
 
 <script>
@@ -64,6 +67,9 @@ export default {
       set (val) {
         this.$store.commit('albums/setEditItem', val)
       }
+    },
+    children () {
+      return [...this.album.children.items].sort(this.byCreatedOnDesc)
     }
   },
   methods: {
@@ -84,6 +90,18 @@ export default {
         this.album = null
         this.errors = err.errors
       })
+    },
+    byOrderAsc (a, b) {
+      if (a.order === b.order) {
+        return 0
+      }
+      return (b.order < a.order) ? 1 : -1
+    },
+    byCreatedOnDesc (a, b) {
+      if (a.createdOn === b.createdOn) {
+        return 0
+      }
+      return (a.createdOn < b.createdOn) ? 1 : -1
     }
   }
 }
