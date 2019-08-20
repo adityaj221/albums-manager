@@ -18,7 +18,7 @@ type Album
   createdOn: AWSDateTime
   publishedOn: AWSDateTime
   modifiedOn: AWSDateTime
-  orderBy: String
+  orderBy: OrderBy
   orderDirection: Direction
 }
 
@@ -65,4 +65,12 @@ enum Visibility {
 enum Direction {
   asc
   desc
+}
+
+enum OrderBy {
+  order
+  createdOn
+  modifiedOn
+  publishedOn
+  name
 }
