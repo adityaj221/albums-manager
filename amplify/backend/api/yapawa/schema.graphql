@@ -1,7 +1,6 @@
 type Album
   @model
   @auth(rules: [{allow: owner}])
-  @key(fields: ["parentId"], name: "gsi-AlbumAlbums")
 {
   id: ID!
   name: String!
