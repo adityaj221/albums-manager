@@ -10,6 +10,11 @@ const listAlbums = `query ListAlbums(
       id
       name
       parentId
+      order
+      createdOn
+      modifiedOn
+      orderBy
+      orderDirection
     }
     nextToken
   }
@@ -20,6 +25,11 @@ const onCreateAlbum = `subscription OnCreateAlbum {
     id
     name
     parentId
+    order
+    createdOn
+    modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `
@@ -28,6 +38,11 @@ const onUpdateAlbum = `subscription OnUpdateAlbum {
     id
     name
     parentId
+    order
+    createdOn
+    modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `

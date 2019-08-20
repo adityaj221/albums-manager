@@ -19,12 +19,28 @@ const listToTree = (list) => {
           mappedArr[mappedElem['parentId']]['children'] = []
         }
         mappedArr[mappedElem['parentId']]['children'].push(mappedElem)
+        mappedArr[mappedElem['parentId']]['children'].sort(byCreatedOnDesc)
       } else {
         tree.push(mappedElem)
+        tree.sort(byOrderAsc)
       }
     }
   }
   return tree
+}
+
+const byOrderAsc = (a, b) => {
+  if (a.order === b.order) {
+    return 0
+  }
+  return (b.order < a.order) ? 1 : -1
+}
+
+const byCreatedOnDesc = (a, b) => {
+  if (a.createdOn === b.createdOn) {
+    return 0
+  }
+  return (a.createdOn < b.createdOn) ? 1 : -1
 }
 
 const getPath = (index, leaf) => {
