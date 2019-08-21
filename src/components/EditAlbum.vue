@@ -121,6 +121,49 @@
                 q-icon.col.cursor-pointer(v-if="fieldStates['status'] === 'modified'" name="cancel" @click="revert('status')")
                 q-icon.col(v-if="fieldStates['status'] === 'saving'" name="save" color="positive")
                 q-icon.col(v-if="fieldStates['status'] === 'error'" name="error" color="error")
+          q-select(
+            dense
+            dark
+            options-dense
+            options-dark
+            options-selected-class="text-accent"
+            standout="bg-grey-5 text-grey-8"
+            v-model="album.orderBy"
+            :value="album.orderBy"
+            label="Order By"
+            :options="enumValues.orderby"
+            @input="modified('orderBy')"
+            @keyup.esc="revert('orderBy')"
+          )
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['orderBy'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['orderBy'] === 'modified'" name="save" @click="save('orderBy')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['orderBy'] === 'modified'" name="cancel" @click="revert('orderBy')")
+                q-icon.col(v-if="fieldStates['orderBy'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['orderBy'] === 'error'" name="error" color="error")
+          q-select(
+            dense
+            dark
+            options-dense
+            options-dark
+            options-selected-class="text-accent"
+            standout="bg-grey-5 text-grey-8"
+            v-model="album.orderDirection"
+            :value="album.orderDirection"
+            label="Order Direction"
+            :options="['asc', 'desc']"
+            @input="modified('orderDirection')"
+            @keyup.esc="revert('orderDirection')"
+          )
+            template(v-slot:after)
+              .column
+                q-icon.col(v-if="fieldStates['orderDirection'] === 'saved'" name="done" color="positive")
+                q-icon.col.cursor-pointer(v-if="fieldStates['orderDirection'] === 'modified'" name="save" @click="save('orderDirection')")
+                q-icon.col.cursor-pointer(v-if="fieldStates['orderDirection'] === 'modified'" name="cancel" @click="revert('orderDirection')")
+                q-icon.col(v-if="fieldStates['orderDirection'] === 'saving'" name="save" color="positive")
+                q-icon.col(v-if="fieldStates['orderDirection'] === 'error'" name="error" color="error")
+
     q-expansion-item(label="History" v-bind="expansionItemStyle")
       .q-pa-md
         .q-gutter-md
@@ -267,7 +310,14 @@ export default {
     },
     item: {
       get () {
-        return this.$store.state.albums.editItem
+        let item = extend({}, this.$store.state.albums.editItem)
+        // if (!item.data['orderBy']) {
+        //   item.data['orderBy'] = 'createdOn'
+        // }
+        // if (!item.data['orderDirection']) {
+        //   item.data['orderDirection'] = 'DESC'
+        // }
+        return item
       }
     },
     slug: {
