@@ -19,28 +19,36 @@ const listToTree = (list) => {
           mappedArr[mappedElem['parentId']]['children'] = []
         }
         mappedArr[mappedElem['parentId']]['children'].push(mappedElem)
-        mappedArr[mappedElem['parentId']]['children'].sort(byCreatedOnDesc)
+        mappedArr[mappedElem['parentId']]['children'].sort(customOrder(mappedArr[mappedElem['parentId']].orderBy, mappedArr[mappedElem['parentId']].orderDirection))
       } else {
         tree.push(mappedElem)
-        tree.sort(byOrderAsc)
+        tree.sort(customOrder('order', 'asc'))
       }
     }
   }
   return tree
 }
 
-const byOrderAsc = (a, b) => {
-  if (a.order === b.order) {
-    return 0
+const customOrder = (field, direction) => {
+  if (field === null) {
+    field = 'createdOn'
   }
-  return (b.order < a.order) ? 1 : -1
-}
-
-const byCreatedOnDesc = (a, b) => {
-  if (a.createdOn === b.createdOn) {
-    return 0
+  if (direction === null) {
+    direction = 'desc'
   }
-  return (a.createdOn < b.createdOn) ? 1 : -1
+  let asc = 1
+  let desc = -1
+  if (direction !== 'desc') {
+    asc = -1
+    desc = 1
+  }
+  let orderFct = (a, b) => {
+    if (a[field] === b[field]) {
+      return 0
+    }
+    return (a[field] < b[field]) ? asc : desc
+  }
+  return orderFct
 }
 
 const getPath = (index, leaf) => {

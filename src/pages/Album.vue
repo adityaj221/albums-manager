@@ -14,6 +14,7 @@
           q-card-section
             .text-h6 {{ item.name }}
             .text-subtitle2 {{ item.createdOn }}
+            .text-subtitle2 {{ item.modifiedOn }}
             .text-subtitle2 {{ item.order }}
           template(v-if="item.description")
             q-separator(dark inset)
@@ -131,7 +132,7 @@ export default {
     fetchAlbum (albumId) {
       this.albumId = albumId
       this.loading = true
-      let getAlbumQuery = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId, sortDirection: 'DESC', limit: 100 })
+      let getAlbumQuery = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId, sortDirection: 'DESC', limit: 1000 })
       this.$Amplify.API.graphql(getAlbumQuery).then(result => {
         this.album = result.data.getAlbum
         this.editItem = {
