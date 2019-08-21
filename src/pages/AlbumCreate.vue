@@ -1,6 +1,6 @@
 <template lang="pug">
   q-page(padding)
-    h1 Create new Album
+    .text-h5 Create new Album
     .q-pa-md
       .q-gutter-xs(style="max-width: 600px")
         amplify-connect(:mutation="createAlbumMutation" @done="onCreateFinished")
@@ -11,22 +11,25 @@
             div.q-gutter-md(v-else)
               q-input(
                 dark
-                filled
+                dense
+                standout="bg-grey-5 text-grey-8"
                 v-model="name"
                 :value="name"
                 label="Name"
               )
               q-input(
                 dark
+                dense
+                standout="bg-grey-5 text-grey-8"
                 v-model="description"
                 :value="description"
-                filled
                 type="textarea"
                 label="Description"
               )
               q-select(
                 dark
-                filled
+                dense
+                standout="bg-grey-5 text-grey-8"
                 options-dense
                 v-model="parentAlbum"
                 :value="parentAlbum"
@@ -35,10 +38,40 @@
                 emit-value
                 map-options
               )
+              q-expansion-item(
+                label="More Properties"
+                dense
+                switch-toggle-side
+                expand-separator
+                header-class = "text-uppercase"
+              )
+                div.q-gutter-md
+                  q-input(
+                    dark
+                    dense
+                    standout="bg-grey-5 text-grey-8"
+                    v-model="summary"
+                    :value="summary"
+                    label="Summary"
+                    type="textarea"
+                  )
+                  q-select(
+                    dense
+                    dark
+                    options-dense
+                    options-dark
+                    options-selected-class="text-accent"
+                    standout="bg-grey-5 text-grey-8"
+                    v-model="visibility"
+                    :value="visibility"
+                    label="Visibility"
+                    :options="enumValues.visibility"
+                  )
               q-btn(color="accent" label="Create" :disabled="btnStatus" @click="mutate")
 </template>
 
 <script>
+const schema = require('../graphql/schema.json')
 import { createAlbum } from '../graphql/mutations'
 import { date, uid } from 'quasar'
 const slugify = require('slugify')
@@ -53,14 +86,27 @@ export default {
       name: '',
       description: null,
       parentAlbum: 'root',
-      newAlbumId: uid()
+      newAlbumId: uid(),
+      visibility: 'public',
+      summary: null
     }
   },
   computed: {
+    enumValues () {
+      let values = {}
+      schema.data.__schema.types.filter(item => item.kind === 'ENUM' && !item.name.startsWith('__')).forEach(item => {
+        let vals = item.enumValues.map(e => { return e.name })
+        values[item.name.toLowerCase()] = vals
+      })
+      return values
+    },
     createAlbumMutation () {
-      let summary = this.description
+      let name = this.name ? this.name.trim() : null
+      let description = this.description ? this.description.trim() : null
+      let summary = this.summary ? this.summary.trim() : description
+      let visibility = this.visibility ? this.visibility.trim() : null
       let order = 1
-      let slug = slugify(this.name)
+      let slug = name ? slugify(name) : null
       let timestamp = Date.now()
       let createdOn = date.formatDate(timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
       let parentId = this.parentAlbum
@@ -70,13 +116,13 @@ export default {
 
       let input = {
         id: this.newAlbumId,
-        name: this.name,
-        description: this.description,
+        name,
+        description,
         summary,
         parentId,
         order,
         slug,
-        visibility: 'public',
+        visibility,
         status: 'draft',
         createdOn,
         modifiedOn: createdOn
