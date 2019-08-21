@@ -60,7 +60,10 @@ module.exports = function (ctx) {
         'QAvatar',
         'QDate',
         'QTime',
-        'QPopupProxy'
+        'QPopupProxy',
+        'QCard',
+        'QCardSection',
+        'QSeparator'
       ],
 
       directives: [

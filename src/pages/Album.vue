@@ -9,13 +9,68 @@
           li(v-for="error in errors" :key="error") {{error.message}}
     div(v-else-if="album")
       .text-h5 {{ album.name }}
-      .row
-        div.q-pa-md(v-for="item in children")
-          q-item(:to="{ path: `/album/${item.id}` }") {{item.name}}
+      .row.q-pa-md.items-start.q-gutter-md
+        q-card.bg-grey-9.cursor-pointer(dark flat v-for="item in children" :key="item.id" @click="$router.push({path: `/album/${item.id}` })")
+          q-card-section
+            .text-h6 {{ item.name }}
+            .text-subtitle2 {{ item.createdOn }}
+            .text-subtitle2 {{ item.order }}
+          template(v-if="item.description")
+            q-separator(dark inset)
+            q-card-section {{ item.description }}
 </template>
 
 <script>
-import { getAlbum } from '../graphql/queries'
+const getAlbum = `query GetAlbum(
+  $id: ID!
+  $createdOn: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+  ) {
+  getAlbum(id: $id) {
+    id
+    name
+    children(
+      createdOn: $createdOn
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        order
+        slug
+        description
+        summary
+        visibility
+        status
+        createdOn
+        publishedOn
+        modifiedOn
+        orderBy
+        orderDirection
+      }
+      nextToken
+    }
+    order
+    slug
+    description
+    summary
+    visibility
+    status
+    createdOn
+    publishedOn
+    modifiedOn
+    orderBy
+    orderDirection
+  }
+}
+`
+
 import { onUpdateAlbum } from '../graphql/subscriptions'
 
 export default {
@@ -76,7 +131,7 @@ export default {
     fetchAlbum (albumId) {
       this.albumId = albumId
       this.loading = true
-      let getAlbumQuery = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId })
+      let getAlbumQuery = this.$Amplify.graphqlOperation(getAlbum, { id: this.albumId, sortDirection: 'DESC', limit: 100 })
       this.$Amplify.API.graphql(getAlbumQuery).then(result => {
         this.album = result.data.getAlbum
         this.editItem = {
@@ -90,18 +145,6 @@ export default {
         this.album = null
         this.errors = err.errors
       })
-    },
-    byOrderAsc (a, b) {
-      if (a.order === b.order) {
-        return 0
-      }
-      return (b.order < a.order) ? 1 : -1
-    },
-    byCreatedOnDesc (a, b) {
-      if (a.createdOn === b.createdOn) {
-        return 0
-      }
-      return (a.createdOn < b.createdOn) ? 1 : -1
     }
   }
 }
