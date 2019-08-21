@@ -183,9 +183,6 @@ export default {
         'switch-toggle-side': true,
         'expand-separator': true,
         'header-class': 'text-uppercase'
-      },
-      inputStyle: {
-
       }
     }
   },
