@@ -11,7 +11,7 @@ const listToTree = (list) => {
     mappedArr[arrElem.id] = arrElem
   }
 
-  for (let id in mappedArr) {
+  for (let id in mappedArr) { // eslint-disable-line no-unused-vars
     if (mappedArr.hasOwnProperty(id)) {
       mappedElem = mappedArr[id]
       if (mappedElem.parentId !== 'root') {
