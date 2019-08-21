@@ -253,3 +253,235 @@ export const listPhotos = `query ListPhotos(
   }
 }
 `;
+export const albumsByOrder = `query AlbumsByOrder(
+  $parentId: ID
+  $order: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumsByOrder(
+    parentId: $parentId
+    order: $order
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      parent {
+        id
+        name
+        parentId
+        order
+        slug
+        description
+        summary
+        visibility
+        status
+        createdOn
+        publishedOn
+        modifiedOn
+        orderBy
+        orderDirection
+      }
+      parentId
+      children {
+        nextToken
+      }
+      photos {
+        nextToken
+      }
+      order
+      slug
+      description
+      summary
+      visibility
+      status
+      createdOn
+      publishedOn
+      modifiedOn
+      orderBy
+      orderDirection
+    }
+    nextToken
+  }
+}
+`;
+export const albumsByModification = `query AlbumsByModification(
+  $parentId: ID
+  $modifiedOn: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumsByModification(
+    parentId: $parentId
+    modifiedOn: $modifiedOn
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      parent {
+        id
+        name
+        parentId
+        order
+        slug
+        description
+        summary
+        visibility
+        status
+        createdOn
+        publishedOn
+        modifiedOn
+        orderBy
+        orderDirection
+      }
+      parentId
+      children {
+        nextToken
+      }
+      photos {
+        nextToken
+      }
+      order
+      slug
+      description
+      summary
+      visibility
+      status
+      createdOn
+      publishedOn
+      modifiedOn
+      orderBy
+      orderDirection
+    }
+    nextToken
+  }
+}
+`;
+export const albumsByPublication = `query AlbumsByPublication(
+  $parentId: ID
+  $publishedOn: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumsByPublication(
+    parentId: $parentId
+    publishedOn: $publishedOn
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      parent {
+        id
+        name
+        parentId
+        order
+        slug
+        description
+        summary
+        visibility
+        status
+        createdOn
+        publishedOn
+        modifiedOn
+        orderBy
+        orderDirection
+      }
+      parentId
+      children {
+        nextToken
+      }
+      photos {
+        nextToken
+      }
+      order
+      slug
+      description
+      summary
+      visibility
+      status
+      createdOn
+      publishedOn
+      modifiedOn
+      orderBy
+      orderDirection
+    }
+    nextToken
+  }
+}
+`;
+export const albumsByName = `query AlbumsByName(
+  $parentId: ID
+  $name: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelAlbumFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  albumsByName(
+    parentId: $parentId
+    name: $name
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      parent {
+        id
+        name
+        parentId
+        order
+        slug
+        description
+        summary
+        visibility
+        status
+        createdOn
+        publishedOn
+        modifiedOn
+        orderBy
+        orderDirection
+      }
+      parentId
+      children {
+        nextToken
+      }
+      photos {
+        nextToken
+      }
+      order
+      slug
+      description
+      summary
+      visibility
+      status
+      createdOn
+      publishedOn
+      modifiedOn
+      orderBy
+      orderDirection
+    }
+    nextToken
+  }
+}
+`;
