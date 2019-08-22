@@ -24,7 +24,7 @@
     "@quasar/quasar-app-extension-icon-genie": "^1.0.1",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^6.2.0",
+    "eslint": "^6.2.1",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "pug": "^2.0.4",
