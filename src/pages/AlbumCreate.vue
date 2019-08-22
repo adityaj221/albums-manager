@@ -30,7 +30,9 @@
                 dark
                 dense
                 standout="bg-grey-5 text-grey-8"
+                options-selected-class="text-accent"
                 options-dense
+                options-dark
                 v-model="parentAlbum"
                 :value="parentAlbum"
                 :options="options"
@@ -56,12 +58,14 @@
                     type="textarea"
                   )
                   q-select(
-                    dense
                     dark
+                    dense
+                    standout="bg-grey-5 text-grey-8"
+                    options-selected-class="text-accent"
                     options-dense
                     options-dark
-                    options-selected-class="text-accent"
-                    standout="bg-grey-5 text-grey-8"
+                    emit-value
+                    map-options
                     v-model="visibility"
                     :value="visibility"
                     label="Visibility"
