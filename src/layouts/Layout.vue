@@ -31,7 +31,9 @@
           q-btn(round dense flat icon="notifications")
             q-badge(color="red" text-color="white" floating) 2
             q-tooltip Notifications
-          q-btn(round dense flat icon="account_circle")
+          q-avatar(size="24px" font-size="24px")
+            q-icon(v-if="!userAvatar" name="account_circle")
+            img(v-if="userAvatar" :src="userAvatar")
             q-tooltip Account
             q-menu(content-class="bg-grey-8")
               q-list(dark)
@@ -103,7 +105,8 @@ export default {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop,
       rightDrawerOpen: true,
-      miniState: true
+      miniState: true,
+      userAvatar: null
     }
   },
   components: {
@@ -124,6 +127,17 @@ export default {
         .catch(err => console.log('err', err)) // eslint-disable-line no-console
       this.$AmplifyEventBus.$emit('authState', 'signedOut')
     }
+  },
+  created () {
+    this.$Auth.currentAuthenticatedUser()
+      .then(user => {
+        if (user && user.attributes && user.attributes.picture) {
+          this.$Amplify.Storage.get(user.attributes.picture, { level: 'public' })
+            .then(url => {
+              this.userAvatar = url
+            })
+        }
+      })
   }
 }
 </script>
