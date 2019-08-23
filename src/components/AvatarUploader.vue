@@ -29,6 +29,7 @@
 </template>
 
 <script>
+// use this instead? https://www.npmjs.com/package/vue-avatar-editor-improved
 export default {
   name: 'PhotoPicker',
   props: ['photoPickerConfig'],
