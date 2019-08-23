@@ -19,7 +19,7 @@
           stretch
           :to="{name: 'home'}"
         )
-          q-avatar
+          q-avatar(square)
             img(src="~assets/yapawa-logo.svg")
           q-toolbar-title(shrink v-if="$q.screen.gt.xs") Yapawa - Content Management
 
