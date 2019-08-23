@@ -22,56 +22,7 @@
 </template>
 
 <script>
-const getAlbum = `query GetAlbum(
-  $id: ID!
-  $createdOn: ModelStringKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelAlbumFilterInput
-  $limit: Int
-  $nextToken: String
-  ) {
-  getAlbum(id: $id) {
-    id
-    name
-    children(
-      createdOn: $createdOn
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        order
-        slug
-        description
-        summary
-        visibility
-        status
-        createdOn
-        publishedOn
-        modifiedOn
-        orderBy
-        orderDirection
-      }
-      nextToken
-    }
-    order
-    slug
-    description
-    summary
-    visibility
-    status
-    createdOn
-    publishedOn
-    modifiedOn
-    orderBy
-    orderDirection
-  }
-}
-`
-
+import { getAlbum } from '../graphql/queries'
 import { onUpdateAlbum } from '../graphql/subscriptions'
 
 export default {
@@ -125,7 +76,7 @@ export default {
       }
     },
     children () {
-      return [...this.album.children.items].sort(this.byCreatedOnDesc)
+      return [...this.album.children.items]// .sort(this.byCreatedOnDesc)
     }
   },
   methods: {

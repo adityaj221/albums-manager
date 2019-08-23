@@ -1,16 +1,12 @@
 type Album
   @model
   @auth(rules: [{allow: owner}])
-  @key(name:"byOrder", fields:["parentId","order"], queryField:"albumsByOrder")
-  @key(name:"byModification", fields:["parentId","modifiedOn"], queryField:"albumsByModification")
-  @key(name:"byPublication", fields:["parentId","publishedOn"], queryField:"albumsByPublication")
-  @key(name:"byName", fields:["parentId","name"], queryField:"albumsByName")
 {
   id: ID!
   name: String!
-  parent: Album @connection(name: "AlbumAlbums", keyField: "parentId", sortField: "createdOn")
+  parent: Album @connection(name: "AlbumAlbums", keyField: "parentId")
   parentId: ID!
-  children: [Album] @connection(name: "AlbumAlbums", keyField: "parentId", sortField: "createdOn")
+  children: [Album] @connection(name: "AlbumAlbums", keyField: "parentId")
   photos: [Photo] @connection(name: "AlbumPhotos", keyField: "albumId")
   order: Int
   slug: String
