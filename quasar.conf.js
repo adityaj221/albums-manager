@@ -63,7 +63,8 @@ module.exports = function (ctx) {
         'QPopupProxy',
         'QCard',
         'QCardSection',
-        'QSeparator'
+        'QSeparator',
+        'QImg'
       ],
 
       directives: [
