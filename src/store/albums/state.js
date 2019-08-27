@@ -1,4 +1,5 @@
 export default {
   list: [],
-  activeAlbumId: null
+  activeAlbumId: null,
+  editItem: null
 }

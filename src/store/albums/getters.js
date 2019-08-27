@@ -11,7 +11,7 @@ const listToTree = (list) => {
     mappedArr[arrElem.id] = arrElem
   }
 
-  for (let id in mappedArr) {
+  for (let id in mappedArr) { // eslint-disable-line no-unused-vars
     if (mappedArr.hasOwnProperty(id)) {
       mappedElem = mappedArr[id]
       if (mappedElem.parentId !== 'root') {
@@ -19,12 +19,36 @@ const listToTree = (list) => {
           mappedArr[mappedElem['parentId']]['children'] = []
         }
         mappedArr[mappedElem['parentId']]['children'].push(mappedElem)
+        mappedArr[mappedElem['parentId']]['children'].sort(customOrder(mappedArr[mappedElem['parentId']].orderBy, mappedArr[mappedElem['parentId']].orderDirection))
       } else {
         tree.push(mappedElem)
+        tree.sort(customOrder('order', 'asc'))
       }
     }
   }
   return tree
+}
+
+const customOrder = (field, direction) => {
+  if (field === null) {
+    field = 'createdOn'
+  }
+  if (direction === null) {
+    direction = 'desc'
+  }
+  let asc = 1
+  let desc = -1
+  if (direction !== 'desc') {
+    asc = -1
+    desc = 1
+  }
+  let orderFct = (a, b) => {
+    if (a[field] === b[field]) {
+      return 0
+    }
+    return (a[field] < b[field]) ? asc : desc
+  }
+  return orderFct
 }
 
 const getPath = (index, leaf) => {
@@ -45,4 +69,11 @@ export const path = state => {
     }
   }
   return leaf => getPath(index, leaf)
+}
+
+export const showEdit = state => {
+  if (state.editItem && state.editItem.type && state.editItem.itemId) {
+    return true
+  }
+  return false
 }

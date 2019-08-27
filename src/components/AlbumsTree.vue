@@ -1,10 +1,11 @@
 <template>
   <q-tree
+    dark
     :nodes="renderTree"
     @update:selected="onSelect"
     :selected.sync="selected"
     :expanded.sync="expanded"
-    selected-color="primary"
+    selected-color="accent"
     node-key="id"
     style="font-size:0.7em"
     no-nodes-label="Loading Albums..."

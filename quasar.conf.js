@@ -43,6 +43,7 @@ module.exports = function (ctx) {
         'QBtn',
         'QIcon',
         'QList',
+        'QExpansionItem',
         'QItem',
         'QItemSection',
         'QItemLabel',
@@ -55,7 +56,15 @@ module.exports = function (ctx) {
         'QTree',
         'QInput',
         'QSelect',
-        'QSpinner'
+        'QSpinner',
+        'QAvatar',
+        'QDate',
+        'QTime',
+        'QPopupProxy',
+        'QCard',
+        'QCardSection',
+        'QSeparator',
+        'QImg'
       ],
 
       directives: [

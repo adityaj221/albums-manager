@@ -10,6 +10,11 @@ const listAlbums = `query ListAlbums(
       id
       name
       parentId
+      order
+      createdOn
+      modifiedOn
+      orderBy
+      orderDirection
     }
     nextToken
   }
@@ -20,6 +25,11 @@ const onCreateAlbum = `subscription OnCreateAlbum {
     id
     name
     parentId
+    order
+    createdOn
+    modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `
@@ -28,6 +38,11 @@ const onUpdateAlbum = `subscription OnUpdateAlbum {
     id
     name
     parentId
+    order
+    createdOn
+    modifiedOn
+    orderBy
+    orderDirection
   }
 }
 `
@@ -57,6 +72,11 @@ export default {
         let index = list.findIndex(x => x.id === item.id)
         list[index].name = item.name
         list[index].parentId = item.parentId
+        list[index].order = item.order
+        list[index].createdOn = item.createdOn
+        list[index].modifiedOn = item.modifiedOn
+        list[index].orderBy = item.orderBy
+        list[index].orderDirection = item.orderDirection
         this.albumsList = list
       }
     })
